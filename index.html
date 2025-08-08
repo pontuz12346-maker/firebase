@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -644,8 +644,10 @@
         const renderHeader = (title) => {
             const userInitial = userProfile?.nome ? userProfile.nome.charAt(0).toUpperCase() : 'U';
             const userType = userProfile?.tipoUtente || '';
+            const showBack = !!userProfile;
             return `
             <header class="page-header">
+                ${showBack ? `<button id="back-btn" style="background:none;border:none;outline:none;cursor:pointer;padding:0 1rem 0 0;display:flex;align-items:center;" onclick="window.history.back()" title="Torna indietro"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>` : ''}
                 <div class="user-avatar">${userInitial}</div>
                 <div>
                     <h1 class="page-title">${title}</h1>
@@ -2791,4 +2793,4 @@
         });
     </script>
 </body>
-</html
+</html>
