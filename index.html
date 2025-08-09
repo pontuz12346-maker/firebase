@@ -903,11 +903,26 @@
             ${renderBottomNavigation()}
         `;
 
-        const renderSondaggiMenu = () => `
+        const renderSondaggiMenu = () => {
+            // Check if user can create polls based on supervisore settings
+            const canCreatePolls = async () => {
+                try {
+                    const settingsRef = doc(db, "settings", "pollCreationAuthorization");
+                    const settingsSnap = await getDoc(settingsRef);
+                    const pollSetting = settingsSnap.exists() ? settingsSnap.data().setting : 'option2';
+                    return isUserAllowedToCreatePolls(userProfile?.tipoUtente, pollSetting);
+                } catch (error) {
+                    console.error("Error checking poll creation permissions:", error);
+                    return false;
+                }
+            };
+            
+            // Render the menu with conditional create button
+            return `
             ${renderHeader('Sondaggi')}
             <main>
                 <div class="dashboard-grid">
-                    <div onclick="navigateTo('sondaggi_crea')" class="dashboard-item">
+                    <div id="create-poll-item" onclick="navigateTo('sondaggi_crea')" class="dashboard-item" style="display: none;">
                         <div class="dashboard-card">
                             <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                         </div>
@@ -922,41 +937,98 @@
                 </div>
             </main>
             ${renderBottomNavigation()}
-        `;
+            <script>
+                // Check permissions and show/hide create button
+                (async () => {
+                    const canCreate = await canCreatePolls();
+                    const createItem = document.getElementById('create-poll-item');
+                    if (createItem) {
+                        createItem.style.display = canCreate ? 'block' : 'none';
+                    }
+                })();
+            </script>
+            `;
+        };
 
-        const renderSondaggiCrea = () => `
+        const renderSondaggiCrea = () => {
+            // Check if user can create polls based on supervisore settings
+            const canCreatePolls = async () => {
+                try {
+                    const settingsRef = doc(db, "settings", "pollCreationAuthorization");
+                    const settingsSnap = await getDoc(settingsRef);
+                    const pollSetting = settingsSnap.exists() ? settingsSnap.data().setting : 'option2';
+                    return isUserAllowedToCreatePolls(userProfile?.tipoUtente, pollSetting);
+                } catch (error) {
+                    console.error("Error checking poll creation permissions:", error);
+                    return false;
+                }
+            };
+            
+            // Render the page with conditional access
+            return `
             ${renderHeader('Crea Sondaggio')}
             <main>
-                <div class="card">
-                    <h3 class="card-title">Crea un Nuovo Sondaggio</h3>
-                    <div id="poll-creation-message" class="message-box"></div>
-                    <form id="create-poll-form" class="space-y-4">
-                        <div><label class="form-label">Tipo Sondaggio</label>
-                            <select id="poll-type" required class="form-select">
-                                <option value="">Seleziona tipo...</option>
-                                <option value="supervisor-consiglieri">Sondaggio tra Supervisor e Consiglieri</option>
-                                <option value="condomini">Sondaggio rivolto ai Condomini</option>
-                            </select>
+                <div id="poll-creation-content" style="display: none;">
+                    <div class="card">
+                        <h3 class="card-title">Crea un Nuovo Sondaggio</h3>
+                        <div id="poll-creation-message" class="message-box"></div>
+                        <form id="create-poll-form" class="space-y-4">
+                            <div><label class="form-label">Tipo Sondaggio</label>
+                                <select id="poll-type" required class="form-select">
+                                    <option value="">Seleziona tipo...</option>
+                                    <option value="supervisor-consiglieri">Sondaggio tra Supervisor e Consiglieri</option>
+                                    <option value="condomini">Sondaggio rivolto ai Condomini</option>
+                                </select>
+                            </div>
+                            <div><label class="form-label">Titolo</label><input type="text" id="poll-title" required class="form-input"></div>
+                            <div><label class="form-label">Descrizione (opzionale)</label><textarea id="poll-description" rows="3" class="form-textarea"></textarea></div>
+                            <div><label class="form-label">Opzioni</label><div id="poll-options-list" class="space-y-4"></div><button type="button" id="add-poll-option" class="btn btn-secondary mt-4">Aggiungi opzione</button></div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label class="form-label">Data fine</label><input type="date" id="poll-deadline" required class="form-input"></div>
+                                <div><label class="form-label">Ora fine</label><input type="time" id="poll-deadline-time" required class="form-input"></form></div>
+                            </div>
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label class="flex items-center gap-3 p-3 rounded-md cursor-pointer" style="background-color: var(--surface-color-light);">
+                                    <input type="checkbox" id="poll-multiple-choice" style="width: 20px; height: 20px; accent-color: var(--accent-color); flex-shrink: 0;">
+                                    <span class="font-medium">Abilita Risposta Multipla</span>
+                                </label>
+                            </div>
+                            <div class="flex justify-end gap-4 pt-4"><button type="reset" class="btn btn-secondary">Annulla</button><button type="submit" class="btn btn-primary">Crea</button></div>
+                        </form>
+                    </div>
+                </div>
+                <div id="poll-access-denied" style="display: none;">
+                    <div class="card">
+                        <div style="text-align: center; padding: 2rem;">
+                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 64px; height: 64px; color: var(--danger); margin: 0 auto 1rem;">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,0 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+                            </svg>
+                            <h3 style="color: var(--danger); margin-bottom: 1rem;">Accesso Negato</h3>
+                            <p style="color: var(--secondary-text); margin-bottom: 1.5rem;">Non hai i permessi per creare sondaggi.</p>
+                            <button onclick="navigateTo('sondaggi')" class="btn btn-primary">Torna ai Sondaggi</button>
                         </div>
-                        <div><label class="form-label">Titolo</label><input type="text" id="poll-title" required class="form-input"></div>
-                        <div><label class="form-label">Descrizione (opzionale)</label><textarea id="poll-description" rows="3" class="form-textarea"></textarea></div>
-                        <div><label class="form-label">Opzioni</label><div id="poll-options-list" class="space-y-4"></div><button type="button" id="add-poll-option" class="btn btn-secondary mt-4">Aggiungi opzione</button></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="form-label">Data fine</label><input type="date" id="poll-deadline" required class="form-input"></div>
-                            <div><label class="form-label">Ora fine</label><input type="time" id="poll-deadline-time" required class="form-input"></div>
-                        </div>
-                        <div class="form-group" style="margin-top: 1rem;">
-                            <label class="flex items-center gap-3 p-3 rounded-md cursor-pointer" style="background-color: var(--surface-color-light);">
-                                <input type="checkbox" id="poll-multiple-choice" style="width: 20px; height: 20px; accent-color: var(--accent-color); flex-shrink: 0;">
-                                <span class="font-medium">Abilita Risposta Multipla</span>
-                            </label>
-                        </div>
-                        <div class="flex justify-end gap-4 pt-4"><button type="reset" class="btn btn-secondary">Annulla</button><button type="submit" class="btn btn-primary">Crea</button></div>
-                    </form>
+                    </div>
                 </div>
             </main>
             ${renderBottomNavigation()}
-        `;
+            <script>
+                // Check permissions and show/hide content
+                (async () => {
+                    const canCreate = await canCreatePolls();
+                    const content = document.getElementById('poll-creation-content');
+                    const accessDenied = document.getElementById('poll-access-denied');
+                    
+                    if (canCreate) {
+                        if (content) content.style.display = 'block';
+                        if (accessDenied) accessDenied.style.display = 'none';
+                    } else {
+                        if (content) content.style.display = 'none';
+                        if (accessDenied) accessDenied.style.display = 'block';
+                    }
+                })();
+            </script>
+            `;
+        };
 
         const renderSondaggiElenco = () => `
             ${renderHeader('Elenco Sondaggi')}
@@ -965,11 +1037,18 @@
                     <div style="margin-bottom: 1rem;">
                         <input type="text" id="poll-search" placeholder="Cerca sondaggi per parole chiave..." class="form-input w-full">
                     </div>
-                    <div>
+                    <div style="margin-bottom: 1rem;">
                         <select id="poll-type-filter" class="form-select w-full">
                             <option value="">Tutti i tipi</option>
                             <option value="supervisor-consiglieri">Supervisor e Consiglieri</option>
                             <option value="condomini">Condomini</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="poll-status-filter" class="form-select w-full">
+                            <option value="">Tutti gli stati</option>
+                            <option value="active">Sondaggi attivi</option>
+                            <option value="expired">Sondaggi scaduti</option>
                         </select>
                     </div>
                 </div>
@@ -1661,7 +1740,36 @@
                 case 'dashboard': content = renderDashboard(); break;
                 case 'bacheca': content = renderBacheca(); break;
                 case 'sondaggi': if (userType !== 'custode') { content = renderSondaggiMenu(); } break;
-                case 'sondaggi_crea': if (userType !== 'custode') { content = renderSondaggiCrea(); } break;
+                case 'sondaggi_crea': 
+                    if (userType !== 'custode') { 
+                        // Check if user can create polls based on supervisore settings
+                        const checkPollCreationAccess = async () => {
+                            try {
+                                const settingsRef = doc(db, "settings", "pollCreationAuthorization");
+                                const settingsSnap = await getDoc(settingsRef);
+                                const pollSetting = settingsSnap.exists() ? settingsSnap.data().setting : 'option2';
+                                return isUserAllowedToCreatePolls(userType, pollSetting);
+                            } catch (error) {
+                                console.error("Error checking poll creation permissions:", error);
+                                return false;
+                            }
+                        };
+                        
+                        // Check access and render accordingly
+                        checkPollCreationAccess().then(canCreate => {
+                            if (canCreate) {
+                                content = renderSondaggiCrea();
+                                app.innerHTML = content;
+                                setupPollHandlers();
+                            } else {
+                                navigateTo('sondaggi');
+                            }
+                        });
+                        return; // Exit early to prevent immediate rendering
+                    } else {
+                        navigateTo('dashboard');
+                    }
+                    break;
                 case 'sondaggi_elenco': if (userType !== 'custode') { content = renderSondaggiElenco(); } break;
                 case 'segnalazioni': content = renderSegnalazioni(); break;
                 case 'profilo': content = renderProfilo(); break;
@@ -1714,7 +1822,7 @@
                 case 'elencoCondomini': loadElencoCondomini(); break;
                 case 'bacheca': loadCommunications(); setupBachecaHandlers(); break;
                 case 'sondaggi': /* No handlers needed for the menu page */ break;
-                case 'sondaggi_crea': if (userType !== 'custode') { setupPollHandlers(); } break;
+                case 'sondaggi_crea': /* Handlers are set up in the content rendering case above */ break;
                 case 'sondaggi_elenco': if (userType !== 'custode') { loadPolls(); } break;
                 case 'segnalazioni': loadReports(); setupReportHandlers(); break;
                 case 'profilo': setupProfileHandlers(); break;
@@ -2000,6 +2108,7 @@
             // Setup search and filter handlers for survey list
             const searchInput = document.getElementById('poll-search');
             const typeFilter = document.getElementById('poll-type-filter');
+            const statusFilter = document.getElementById('poll-status-filter');
             
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
@@ -2009,6 +2118,12 @@
             
             if (typeFilter) {
                 typeFilter.addEventListener('change', () => {
+                    loadPolls();
+                });
+            }
+            
+            if (statusFilter) {
+                statusFilter.addEventListener('change', () => {
                     loadPolls();
                 });
             }
@@ -3344,6 +3459,16 @@
             return roles.includes(userType);
         };
 
+        const isUserAllowedToCreatePolls = (userType, setting) => {
+            const allowedRoles = {
+                option1: ['supervisore', 'amministratore', 'consigliere'],
+                option2: ['supervisore', 'amministratore', 'consigliere', 'condomino'],
+                option3: ['supervisore', 'consigliere']
+            };
+            const roles = allowedRoles[setting] || allowedRoles['option2'];
+            return roles.includes(userType);
+        };
+
         const showPollVoters = async (pollId) => {
             try {
                 const pollDoc = await getDoc(doc(db, "polls", pollId));
@@ -3387,7 +3512,7 @@
             const container = document.getElementById("polls-container");
             if (!container) return;
             
-            const settingsRef = doc(db, "settings", "pollAuthorization");
+            const settingsRef = doc(db, "settings", "pollCreationAuthorization");
             getDoc(settingsRef).then(settingsSnap => {
                 const pollSetting = settingsSnap.exists() ? settingsSnap.data().setting : 'option2';
                 const canUserVote = isUserAllowedToVote(userProfile.tipoUtente, pollSetting);
@@ -3401,14 +3526,28 @@
                     // Get search and filter values
                     const searchTerm = document.getElementById('poll-search')?.value?.toLowerCase() || '';
                     const typeFilter = document.getElementById('poll-type-filter')?.value || '';
+                    const statusFilter = document.getElementById('poll-status-filter')?.value || '';
                     
-                    // Filter polls based on search and type
+                    // Filter polls based on search, type, and status
                     let filteredPolls = snapshot.docs.filter(docSnap => {
                         const poll = docSnap.data();
                         
                         // Filter by type if specified
                         if (typeFilter && poll.pollType !== typeFilter) {
                             return false;
+                        }
+                        
+                        // Filter by status if specified
+                        if (statusFilter) {
+                            const deadline = poll.deadline ? poll.deadline.toDate() : null;
+                            const isExpired = deadline ? deadline < new Date() : false;
+                            
+                            if (statusFilter === 'active' && isExpired) {
+                                return false;
+                            }
+                            if (statusFilter === 'expired' && !isExpired) {
+                                return false;
+                            }
                         }
                         
                         // Filter by search term
@@ -3919,7 +4058,7 @@
 
         const voteOnPoll = async (pollId, optionIndex) => {
             try {
-                const settingsRef = doc(db, "settings", "pollAuthorization");
+                const settingsRef = doc(db, "settings", "pollCreationAuthorization");
                 const settingsSnap = await getDoc(settingsRef);
                 const pollSetting = settingsSnap.exists() ? settingsSnap.data().setting : "option2";
                 if (!isUserAllowedToVote(userProfile.tipoUtente, pollSetting)) {
@@ -4028,6 +4167,8 @@
         window.loadElencoCondomini = loadElencoCondomini;
         window.deleteUser = deleteUser;
         window.openUserEditModal = openUserEditModal;
+        window.isUserAllowedToVote = isUserAllowedToVote;
+        window.isUserAllowedToCreatePolls = isUserAllowedToCreatePolls;
         const deletePoll = async (pollId) => {
             if (!confirm('Sei sicuro di voler eliminare questo sondaggio? L\'azione è irreversibile.')) {
                 return;
