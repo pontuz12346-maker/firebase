@@ -655,7 +655,7 @@
         let groupedProperties = {};
         let partialCondosList = [];
 
-        const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
+        const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>`;
         const eyeSlashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .68l1.64 1.64C9.74 7.13 10.82 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L21.73 23 20.46 21.73 4.54 5.81 3.27 4.54 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
 
         const modalContainer = document.getElementById('modal-container');
@@ -706,7 +706,7 @@
                  renderCurrentPage();
                  return;
             }
-            if(userType==="custode"&&["dashboard","bacheca","sondaggi"].includes(e)){
+            if(userType==="custode"&&["dashboard","bacheca","sondaggi","sondaggi_crea","sondaggi_elenco","sondaggi_attivi","sondaggi_conclusi"].includes(e)){
                 navigateTo("segnalazioni");
             } else {
                 currentPage=e,renderCurrentPage();
@@ -839,7 +839,7 @@
                     <a href="#" onclick="navigateTo('dashboard')" class="nav-item ${currentPage === 'dashboard' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></a>
                     <a href="#" onclick="navigateTo('bacheca')" id="nav-item-bacheca" class="nav-item ${currentPage === 'bacheca' ? 'active' : ''}"><span id="bacheca-notification-badge" class="notification-badge hidden"></span><svg fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg><span>Bacheca</span></a>
                     <a href="#" onclick="navigateTo('segnalazioni')" class="nav-item ${currentPage === 'segnalazioni' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"/></svg><span>Segnala</span></a>
-                    <a href="#" onclick="navigateTo('sondaggi')" class="nav-item ${['sondaggi', 'sondaggi_crea', 'sondaggi_elenco'].includes(currentPage) ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg><span>Sondaggi</span></a>
+                    <a href="#" onclick="navigateTo('sondaggi')" class="nav-item ${['sondaggi', 'sondaggi_crea', 'sondaggi_elenco', 'sondaggi_attivi', 'sondaggi_conclusi'].includes(currentPage) ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg><span>Sondaggi</span></a>
                     <a href="#" onclick="navigateTo('profilo')" class="nav-item ${currentPage === 'profilo' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/></svg><span>Profilo</span></a>
                 `;
             return `<nav class="bottom-nav">${navItems}</nav>`;
@@ -925,6 +925,18 @@
                         </div>
                         <p>Elenco Sondaggi</p>
                     </div>
+                    <div onclick="navigateTo('sondaggi_attivi')" class="dashboard-item">
+                        <div class="dashboard-card">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <p>Sondaggi Attivi</p>
+                    </div>
+                    <div onclick="navigateTo('sondaggi_conclusi')" class="dashboard-item">
+                        <div class="dashboard-card">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </div>
+                        <p>Sondaggi Conclusi</p>
+                    </div>
                 </div>
             </main>
             ${renderBottomNavigation()}
@@ -971,6 +983,45 @@
                 <div class="card" style="margin-bottom: 1rem;">
                     <div style="margin-bottom: 1rem;">
                         <input type="text" id="poll-search" placeholder="Cerca sondaggi per parole chiave..." class="form-input w-full">
+                    </div>
+                    <div>
+                        <select id="poll-type-filter" class="form-select w-full">
+                            <option value="">Tutti i tipi</option>
+                            <option value="supervisor-consiglieri">Supervisor e Consiglieri</option>
+                            <option value="condomini">Condomini</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="polls-container" class="list-container"></div>
+            </main>
+            ${renderBottomNavigation()}
+        `;
+        const renderSondaggiAttivi = () => `
+            ${renderHeader('Sondaggi Attivi')}
+            <main>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" id="poll-search" placeholder="Cerca sondaggi attivi per parole chiave..." class="form-input w-full">
+                    </div>
+                    <div>
+                        <select id="poll-type-filter" class="form-select w-full">
+                            <option value="">Tutti i tipi</option>
+                            <option value="supervisor-consiglieri">Supervisor e Consiglieri</option>
+                            <option value="condomini">Condomini</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="polls-container" class="list-container"></div>
+            </main>
+            ${renderBottomNavigation()}
+        `;
+
+        const renderSondaggiConclusi = () => `
+            ${renderHeader('Sondaggi Conclusi')}
+            <main>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" id="poll-search" placeholder="Cerca sondaggi conclusi per parole chiave..." class="form-input w-full">
                     </div>
                     <div>
                         <select id="poll-type-filter" class="form-select w-full">
@@ -1067,7 +1118,7 @@
                         </div>
                         <div onclick="navigateTo('numeriUtiliRubrica')" class="dashboard-item" style="grid-column: 1 / -1;">
                             <div class="dashboard-card" style="aspect-ratio: auto; height: 80px; flex-direction: row; justify-content: flex-start; gap: 1.5rem; padding: 1rem 1.5rem;">
-                                <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M20,2H4A2,2 0 0,0 2,4V20A2,2 0,0,0 4,22H20A2,2 0,0,0 22,20V4A2,2 0,0,0 20,2M12,6A3,3 0,0,1 15,9A3,3 0,0,1 12,12A3,3 0,0,1 9,9A3,3 0,0,1 12,6M18,20H6V18.6C6,16.6 10,15.5 12,15.5C14,15.5 18,16.6 18,18.6V20Z"/></svg>
+                                <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M20,2H4A2,2 0 0,0 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4A2,2 0 0,0 20,2M12,6A3,3 0,0,1 15,9A3,3 0,0,1 12,12A3,3 0,0,1 9,9A3,3 0,0,1 12,6M18,20H6V18.6C6,16.6 10,15.5 12,15.5C14,15.5 18,16.6 18,18.6V20Z"/></svg>
                                 <p style="text-align: left; font-size: 1.1rem;">Rubrica Completa</p>
                             </div>
                         </div>
@@ -1383,7 +1434,6 @@
                 container.innerHTML = `<div class="card"><p class="message-box error" style="display:block;">Si è verificato un errore: ${error.message}</p></div>`;
             }
         };
-
                 const renderImportazione = () => `
             ${renderHeader('Importazione Dati')}
             <main>
@@ -1430,11 +1480,60 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- SEZIONE 3: IMPORTAZIONE ORARI CUSTODE -->
+                <div class="card">
+                    <h3 class="card-title">Importa Orari del Custode</h3>
+                    <p class="form-label" style="margin-bottom: 1.5rem; color: var(--secondary-text);">
+                        Carica un file Excel per gli orari di lavoro del custode. Questi dati verranno visualizzati nella sezione "Custode" e saranno disponibili per tutti gli utenti.
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label">Carica Nuovo File Orari (.xlsx, .xls)</label>
+                        <input type="file" id="excel-file-input-orari-custode-import" class="form-input" accept=".xlsx, .xls">
+                    </div>
+                    <div id="message-import-orari-custode-import" class="message-box"></div>
+                    <div id="save-button-container-orari-custode-import" class="hidden mt-4">
+                        <button id="save-imported-data-btn-orari-custode-import" class="btn btn-primary w-full">Salva Orari Custode</button>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="section-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Anteprima / Dati Attuali</h4>
+                        <div id="excel-table-container-orari-custode-import" class="data-table-container">
+                            <p style="color:var(--secondary-text);">Nessun file selezionato o caricato.</p>
+                        </div>
+                    </div>
+                </div>
             </main>
             ${renderBottomNavigation()}
         `;
         
-                const renderGestioneGruppiMenu = () => `
+                const renderOrariCustode = () => `
+            ${renderHeader('Importa Orari Custode')}
+            <main>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 class="card-title">Importa Orari del Custode</h3>
+                    <p class="form-label" style="margin-bottom: 1.5rem; color: var(--secondary-text);">
+                        Carica il file Excel contenente gli orari di lavoro del custode. Il file deve contenere le colonne per giorno, orario di inizio e fine, e altre informazioni relative agli orari.
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label">Carica File Orari Custode (.xlsx, .xls)</label>
+                        <input type="file" id="excel-file-input-orari-custode" class="form-input" accept=".xlsx, .xls">
+                    </div>
+                    <div id="message-import-orari-custode" class="message-box"></div>
+                    <div id="save-button-container-orari-custode" class="hidden mt-4">
+                        <button id="save-imported-data-btn-orari-custode" class="btn btn-primary w-full">Salva Orari Custode</button>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="section-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Anteprima / Dati Attuali</h4>
+                        <div id="excel-table-container-orari-custode" class="data-table-container">
+                            <p style="color:var(--secondary-text);">Nessun file selezionato o caricato.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            ${renderBottomNavigation()}
+        `;
+        
+        const renderGestioneGruppiMenu = () => `
             ${renderHeader('Funzioni Supervisor')}
             <main>
                 <div class="dashboard-grid" style="grid-template-columns: 1fr;">
@@ -1452,7 +1551,7 @@
                     </div>
                     <div onclick="navigateTo('gestioneGruppi_regole')" class="dashboard-item">
                         <div class="dashboard-card" style="aspect-ratio: auto; padding: 1.5rem; flex-direction: row; justify-content: flex-start; gap: 1.5rem;">
-                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24-.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24-.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
                             <p style="text-align: left; font-size: 1.1rem;">Gestione Regole</p>
                         </div>
                     </div>
@@ -1460,6 +1559,12 @@
                         <div class="dashboard-card" style="aspect-ratio: auto; padding: 1.5rem; flex-direction: row; justify-content: flex-start; gap: 1.5rem;">
                             <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg>
                             <p style="text-align: left; font-size: 1.1rem;">Importa Dati</p>
+                        </div>
+                    </div>
+                    <div onclick="navigateTo('orari_custode')" class="dashboard-item">
+                        <div class="dashboard-card" style="aspect-ratio: auto; padding: 1.5rem; flex-direction: row; justify-content: flex-start; gap: 1.5rem;">
+                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,19.2L11,13.5V7H12.5V12.8L17,18.2L16.2,19.2Z"/></svg>
+                            <p style="text-align: left; font-size: 1.1rem;">Orari Custode</p>
                         </div>
                     </div>
                     <div onclick="navigateTo('impostazioniSondaggi')" class="dashboard-item">
@@ -1690,6 +1795,8 @@
                 case 'sondaggi': if (userType !== 'custode') { content = await renderSondaggiMenu(); } break;
                 case 'sondaggi_crea': if (userType !== 'custode') { content = renderSondaggiCrea(); } break;
                 case 'sondaggi_elenco': if (userType !== 'custode') { content = renderSondaggiElenco(); } break;
+                case 'sondaggi_attivi': if (userType !== 'custode') { content = renderSondaggiAttivi(); } break;
+                case 'sondaggi_conclusi': if (userType !== 'custode') { content = renderSondaggiConclusi(); } break;
                 case 'segnalazioni': content = renderSegnalazioni(); break;
                 case 'profilo': content = renderProfilo(); break;
                 case 'infoUtili': content = renderInfoUtili(); break;
@@ -1734,6 +1841,7 @@
                     if (['supervisore', 'adm'].includes(userType)) content = renderImpostazioniSondaggi();
                     else navigateTo('dashboard');
                     break;
+                case 'orari_custode': if (userType === 'supervisore') content = renderOrariCustode(); break;
                 default: content = renderLoginPage();
             }
 
@@ -1746,11 +1854,29 @@
                 case 'sondaggi_crea': if (userType !== 'custode') { setupPollHandlers(); } break;
                 case 'sondaggi_elenco': 
                     if (userType !== 'custode') { 
-                        loadPolls(); 
+                        loadPolls('all'); 
                         const searchInput = document.getElementById('poll-search');
                         const typeFilter = document.getElementById('poll-type-filter');
-                        searchInput?.addEventListener('input', loadPolls);
-                        typeFilter?.addEventListener('change', loadPolls);
+                        searchInput?.addEventListener('input', () => loadPolls('all'));
+                        typeFilter?.addEventListener('change', () => loadPolls('all'));
+                    } 
+                    break;
+                case 'sondaggi_attivi': 
+                    if (userType !== 'custode') { 
+                        loadPolls('active'); 
+                        const searchInput = document.getElementById('poll-search');
+                        const typeFilter = document.getElementById('poll-type-filter');
+                        searchInput?.addEventListener('input', () => loadPolls('active'));
+                        typeFilter?.addEventListener('change', () => loadPolls('active'));
+                    } 
+                    break;
+                case 'sondaggi_conclusi': 
+                    if (userType !== 'custode') { 
+                        loadPolls('closed'); 
+                        const searchInput = document.getElementById('poll-search');
+                        const typeFilter = document.getElementById('poll-type-filter');
+                        searchInput?.addEventListener('input', () => loadPolls('closed'));
+                        typeFilter?.addEventListener('change', () => loadPolls('closed'));
                     } 
                     break;
                 case 'segnalazioni': loadReports(); setupReportHandlers(); break;
@@ -1768,6 +1894,7 @@
                     break;
                 case 'numeriUtiliCustode':
                     loadCustodeNumbers();
+                    loadCustodeOrari();
                     break;
 
                 case 'userManagement': if (['supervisore', 'adm'].includes(userType)) { loadUsers(); setupAdminUserCreationHandler(); } break;
@@ -1775,6 +1902,7 @@
                 case 'gestioneGruppi_lista': if (['supervisore', 'adm'].includes(userType)) { loadPartialCondos(); setupUserManagementHandlers(); } break;
                 case 'gestioneGruppi_regole': if (['supervisore', 'adm'].includes(userType)) { loadGroupRules(); setupGestioneGruppiHandlers(); } break;
                 case 'importazione': if (userType === 'supervisore') { setupImportazioneHandlers(); } break;
+                case 'orari_custode': if (userType === 'supervisore') { setupOrariCustodeHandlers(); } break;
                 case 'impostazioniSondaggi': if (['supervisore', 'adm'].includes(userType)) { setupImpostazioniSondaggiHandlers(); } break;
             }
 
@@ -1782,7 +1910,6 @@
                 checkForNewCommunications();
             }
         };
-
         const setupLoginHandlers = () => {
             let isRegistering = false;
             let localGroupedProperties = {};
@@ -2252,7 +2379,6 @@
             });
             return tableData;
         };
-
         const setupImportazioneHandlers = async () => {
             let partialCondosList = [];
             let activeRules = [];
@@ -2474,9 +2600,222 @@
                     saveBtnPhones.disabled = false; saveBtnPhones.textContent = 'Salva Numeri Utili';
                 }
             });
+        };
+
+            // Handle custodian hours file upload for import section
+            const fileInputOrariCustode = document.getElementById('excel-file-input-orari-custode-import');
+            const tableContainerOrariCustode = document.getElementById('excel-table-container-orari-custode-import');
+            const messageBoxOrariCustode = document.getElementById('message-import-orari-custode-import');
+            const saveBtnContainerOrariCustode = document.getElementById('save-button-container-orari-custode-import');
+            const saveBtnOrariCustode = document.getElementById('save-imported-data-btn-orari-custode-import');
+            let orariCustodeDataToSave = null;
+            let orariCustodeFileNameForSave = '';
+
+            const loadLatestOrariCustodeData = async () => {
+                const q = query(collection(db, "custodianHours"), orderBy("uploadedAt", "desc"), limit(1));
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    const data = snapshot.docs[0].data().tableData;
+                    tableContainerOrariCustode.innerHTML = generateTableHTML(data);
+                } else {
+                    tableContainerOrariCustode.innerHTML = '<p style="color:var(--secondary-text);">Nessun orario custode ancora importato.</p>';
+                }
+            };
+
+            if (fileInputOrariCustode) {
+                fileInputOrariCustode.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    orariCustodeDataToSave = null;
+                    orariCustodeFileNameForSave = '';
+                    saveBtnContainerOrariCustode.classList.add('hidden');
+                    messageBoxOrariCustode.style.display = 'none';
+                    
+                    if (!file) {
+                        loadLatestOrariCustodeData();
+                        return;
+                    }
+                    
+                    orariCustodeFileNameForSave = file.name;
+                    tableContainerOrariCustode.innerHTML = '<p>Caricamento anteprima...</p>';
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const data = new Uint8Array(e.target.result);
+                            const workbook = XLSX.read(data, { type: 'array' });
+                            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                            
+                            if (jsonData.length === 0) {
+                                throw new Error("Il file è vuoto.");
+                            }
+                            
+                            orariCustodeDataToSave = jsonData;
+                            tableContainerOrariCustode.innerHTML = generateTableHTML(jsonData);
+                            saveBtnContainerOrariCustode.classList.remove('hidden');
+                            
+                        } catch (err) {
+                            messageBoxOrariCustode.className = 'message-box error';
+                            messageBoxOrariCustode.textContent = `Errore: ${err.message}`;
+                            messageBoxOrariCustode.style.display = 'block';
+                        }
+                    };
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+
+            if (saveBtnOrariCustode) {
+                saveBtnOrariCustode.addEventListener('click', async () => {
+                    if (!orariCustodeDataToSave) return;
+                    
+                    saveBtnOrariCustode.disabled = true;
+                    saveBtnOrariCustode.textContent = 'Salvataggio...';
+                    
+                    try {
+                        await addDoc(collection(db, "custodianHours"), {
+                            fileName: orariCustodeFileNameForSave,
+                            tableData: orariCustodeDataToSave,
+                            uploadedBy: currentUser.uid,
+                            uploadedAt: serverTimestamp()
+                        });
+                        
+                        await logActivity("custodian_hours_imported", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { 
+                            fileName: orariCustodeFileNameForSave 
+                        });
+                        
+                        fileInputOrariCustode.value = '';
+                        saveBtnContainerOrariCustode.classList.add('hidden');
+                        await loadLatestOrariCustodeData();
+                        
+                    } catch (error) {
+                        messageBoxOrariCustode.className = 'message-box error';
+                        messageBoxOrariCustode.textContent = 'Errore durante il salvataggio.';
+                        messageBoxOrariCustode.style.display = 'block';
+                    } finally {
+                        saveBtnOrariCustode.disabled = false;
+                        saveBtnOrariCustode.textContent = 'Salva Orari Custode';
+                    }
+                });
+            }
 
             await loadPrerequisites();
-            await Promise.all([loadLatestMillesimiData(), loadLatestPhoneData()]);
+            await Promise.all([loadLatestMillesimiData(), loadLatestPhoneData(), loadLatestOrariCustodeData()]);
+        };
+
+        const setupOrariCustodeHandlers = () => {
+            const fileInput = document.getElementById('excel-file-input-orari-custode');
+            const saveButton = document.getElementById('save-imported-data-btn-orari-custode');
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', handleOrariCustodeFileUpload);
+            }
+            
+            if (saveButton) {
+                saveButton.addEventListener('click', saveOrariCustodeData);
+            }
+        };
+
+        const handleOrariCustodeFileUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const tableContainer = document.getElementById('excel-table-container-orari-custode');
+            const messageBox = document.getElementById('message-import-orari-custode');
+            const saveBtnContainer = document.getElementById('save-button-container-orari-custode');
+            
+            saveBtnContainer.classList.add('hidden');
+            messageBox.style.display = 'none';
+            tableContainer.innerHTML = '<p>Caricamento anteprima...</p>';
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    if (jsonData.length === 0) {
+                        throw new Error("Il file è vuoto.");
+                    }
+                    
+                    // Store the data for saving
+                    window.orariCustodeData = jsonData;
+                    window.orariCustodeFileName = file.name;
+                    
+                    // Generate table HTML
+                    let tableHTML = '<table class="data-table">';
+                    const headers = Object.keys(jsonData[0]);
+                    tableHTML += '<thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+                    
+                    jsonData.forEach(row => {
+                        tableHTML += '<tr>';
+                        headers.forEach(header => {
+                            const cellValue = row[header] !== undefined ? row[header] : '';
+                            tableHTML += `<td>${cellValue}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    tableContainer.innerHTML = tableHTML;
+                    saveBtnContainer.classList.remove('hidden');
+                    
+                } catch (err) {
+                    messageBox.className = 'message-box error';
+                    messageBox.textContent = `Errore: ${err.message}`;
+                    messageBox.style.display = 'block';
+                    tableContainer.innerHTML = '<p style="color:var(--secondary-text);">Errore nel caricamento del file.</p>';
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+
+        const saveOrariCustodeData = async () => {
+            if (!window.orariCustodeData) return;
+            
+            const saveButton = document.getElementById('save-imported-data-btn-orari-custode');
+            const messageBox = document.getElementById('message-import-orari-custode');
+            
+            saveButton.disabled = true;
+            saveButton.textContent = 'Salvataggio...';
+            
+            try {
+                await addDoc(collection(db, "custodianHours"), {
+                    fileName: window.orariCustodeFileName,
+                    tableData: window.orariCustodeData,
+                    uploadedBy: currentUser.uid,
+                    uploadedAt: serverTimestamp()
+                });
+                
+                await logActivity("custodian_hours_imported", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { 
+                    fileName: window.orariCustodeFileName 
+                });
+                
+                messageBox.className = 'message-box success';
+                messageBox.textContent = 'Orari custode salvati con successo!';
+                messageBox.style.display = 'block';
+                
+                // Clear the file input
+                const fileInput = document.getElementById('excel-file-input-orari-custode');
+                if (fileInput) fileInput.value = '';
+                
+                // Hide save button
+                const saveBtnContainer = document.getElementById('save-button-container-orari-custode');
+                saveBtnContainer.classList.add('hidden');
+                
+                // Clear stored data
+                window.orariCustodeData = null;
+                window.orariCustodeFileName = null;
+                
+                setTimeout(() => { messageBox.style.display = 'none'; }, 3000);
+                
+            } catch (error) {
+                messageBox.className = 'message-box error';
+                messageBox.textContent = `Errore durante il salvataggio: ${error.message}`;
+                messageBox.style.display = 'block';
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = 'Salva Orari Custode';
+            }
         };
 
         const setupUserManagementHandlers = () => {
@@ -2562,6 +2901,43 @@
                     </div>
                     `;
                 }).join('');
+            });
+        };
+
+        const loadCustodeOrari = () => {
+            const container = document.getElementById('custode-orari-container');
+            if (!container) return;
+            
+            const q = query(collection(db, "custodianHours"), orderBy("uploadedAt", "desc"), limit(1));
+            onSnapshot(q, snapshot => {
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color:var(--secondary-text); padding: 1rem 0;">Nessun orario custode disponibile.</p>';
+                    return;
+                }
+                
+                const data = snapshot.docs[0].data();
+                const tableData = data.tableData;
+                
+                if (!tableData || tableData.length === 0) {
+                    container.innerHTML = '<p style="color:var(--secondary-text); padding: 1rem 0;">Nessun orario custode disponibile.</p>';
+                    return;
+                }
+                
+                let tableHTML = '<table class="data-table">';
+                const headers = Object.keys(tableData[0]);
+                tableHTML += '<thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+                
+                tableData.forEach(row => {
+                    tableHTML += '<tr>';
+                    headers.forEach(header => {
+                        const cellValue = row[header] !== undefined ? row[header] : '';
+                        tableHTML += `<td>${cellValue}</td>`;
+                    });
+                    tableHTML += '</tr>';
+                });
+                
+                tableHTML += '</tbody></table>';
+                container.innerHTML = tableHTML;
             });
         };
 
@@ -2710,7 +3086,6 @@
                 console.error('Errore aggiornamento stato regola:', error);
             }
         };
-
         const loadGroupRules = () => {
             const listEl = document.getElementById('group-rules-list');
             if (!listEl) return;
@@ -3171,7 +3546,6 @@
             ${renderBottomNavigation()}
         `;
         };
-
         const loadRubricaNumbers = () => {
             const importedContainer = document.getElementById('rubrica-imported-container');
             const manualContainer = document.getElementById('rubrica-manual-container');
@@ -3331,12 +3705,23 @@
         const renderNumeriUtiliCustode = () => `
             ${renderHeader('Contatti Custode')}
             <main>
-                <div class="card">
-                    <p class="form-label" style="color: var(--secondary-text); margin-bottom: 2rem;">
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 class="card-title">Contatti del Custode</h3>
+                    <p class="form-label" style="color: var(--secondary-text); margin-bottom: 1rem;">
                         Contatti del custode del condominio.
                     </p>
                     <div id="custode-container" class="data-table-container">
                         <p style="color:var(--secondary-text);">Caricamento contatti custode...</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Orari di Lavoro del Custode</h3>
+                    <p class="form-label" style="color: var(--secondary-text); margin-bottom: 1rem;">
+                        Orari di lavoro e disponibilità del custode.
+                    </p>
+                    <div id="custode-orari-container" class="data-table-container">
+                        <p style="color:var(--secondary-text);">Caricamento orari custode...</p>
                     </div>
                 </div>
             </main>
@@ -3494,8 +3879,7 @@
                 console.error("Errore nel caricare i votanti:", error);
             }
         };
-
-        const loadPolls = () => {
+        const loadPolls = (status = 'all') => {
             const container = document.getElementById("polls-container");
             if (!container) return;
             
@@ -3506,7 +3890,13 @@
                 const q = query(collection(db, "polls"), orderBy("createdAt", "desc"));
                 onSnapshot(q, snapshot => {
                     if (snapshot.empty) {
-                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">Nessun sondaggio disponibile.</p></div>`;
+                        let message = 'Nessun sondaggio disponibile.';
+                        if (status === 'active') {
+                            message = 'Nessun sondaggio attivo disponibile.';
+                        } else if (status === 'closed') {
+                            message = 'Nessun sondaggio concluso disponibile.';
+                        }
+                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">${message}</p></div>`;
                         return;
                     }
                     
@@ -3514,9 +3904,17 @@
                     const searchTerm = document.getElementById('poll-search')?.value?.toLowerCase() || '';
                     const typeFilter = document.getElementById('poll-type-filter')?.value || '';
                     
-                    // Filter polls based on search and type
+                    // Filter polls based on search, type, and status
                     let filteredPolls = snapshot.docs.filter(docSnap => {
                         const poll = docSnap.data();
+                        
+                        // Filter by status (active/closed)
+                        if (status !== 'all') {
+                            const deadline = poll.deadline?.toDate();
+                            const isExpired = deadline && deadline < new Date();
+                            if (status === 'active' && isExpired) return false;
+                            if (status === 'closed' && !isExpired) return false;
+                        }
                         
                         // Filter by type if specified
                         if (typeFilter && poll.pollType !== typeFilter) {
@@ -3535,7 +3933,13 @@
                     });
                     
                     if (filteredPolls.length === 0) {
-                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">Nessun sondaggio trovato con i criteri di ricerca.</p></div>`;
+                        let message = 'Nessun sondaggio trovato con i criteri di ricerca.';
+                        if (status === 'active') {
+                            message = 'Nessun sondaggio attivo trovato.';
+                        } else if (status === 'closed') {
+                            message = 'Nessun sondaggio concluso trovato.';
+                        }
+                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">${message}</p></div>`;
                         return;
                     }
                     
@@ -3875,7 +4279,6 @@
             
             return { headers: orderedHeaders, data: orderedData };
         };
-
         const loadUsefulNumbers = () => {
             const manualTableBody = document.getElementById('useful-numbers-table-body');
             const importedTableContainer = document.getElementById('imported-numbers-table-container');
@@ -4194,4 +4597,4 @@
         });
     </script>
 </body>
-</html
+</html>
