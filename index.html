@@ -150,6 +150,14 @@
             white-space: nowrap;
         }
 
+        /* Access denied styling */
+        .access-denied-icon {
+            width: 64px;
+            height: 64px;
+            color: var(--danger);
+            margin: 0 auto 1rem;
+        }
+
         /* Bottoni */
         .btn {
             display: inline-flex;
@@ -1032,39 +1040,82 @@
             ${renderBottomNavigation()}
         `;
         
-                const renderInfoUtili = () => `
-            ${renderHeader('Numeri Utili')}
-            <main>
-                <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
-                    <div onclick="navigateTo('numeriUtiliImportati')" class="dashboard-item">
-                        <div class="dashboard-card"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg></div>
-                        <p>Importazione</p>
-                    </div>
-                    <div onclick="navigateTo('numeriUtiliManuali')" class="dashboard-item">
-                        <div class="dashboard-card"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.13,5.12L18.88,8.87M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25Z"/></svg></div>
-                        <p>Inserimento</p>
-                    </div>
-                    <div onclick="navigateTo('numeriUtiliRubrica')" class="dashboard-item" style="grid-column: 1 / -1;">
-                        <div class="dashboard-card" style="aspect-ratio: auto; height: 80px; flex-direction: row; justify-content: flex-start; gap: 1.5rem; padding: 1rem 1.5rem;">
-                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M20,2H4A2,2 0 0,0 2,4V20A2,2 0 0,0 4,22H20A2,2 0 0,0 22,20V4A2,2 0 0,0 20,2M12,6A3,3 0 0,1 15,9A3,3 0 0,1 12,12A3,3 0 0,1 9,9A3,3 0 0,1 12,6M18,20H6V18.6C6,16.6 10,15.5 12,15.5C14,15.5 18,16.6 18,18.6V20Z"/></svg>
-                            <p style="text-align: left; font-size: 1.1rem;">Rubrica Completa</p>
+                const renderInfoUtili = () => {
+            const isSupervisore = userProfile?.tipoUtente === 'supervisore';
+            
+            if (isSupervisore) {
+                // Supervisore users see all subsections
+                return `
+                ${renderHeader('Numeri Utili')}
+                <main>
+                    <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div onclick="navigateTo('numeriUtiliImportati')" class="dashboard-item">
+                            <div class="dashboard-card"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg></div>
+                            <p>Importazione</p>
+                        </div>
+                        <div onclick="navigateTo('numeriUtiliManuali')" class="dashboard-item">
+                            <div class="dashboard-card"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.13,5.12L18.88,8.87M3,17.25V21H6.75L17.81,9.94L14.06,6.19L3,17.25Z"/></svg></div>
+                            <p>Inserimento</p>
+                        </div>
+                        <div onclick="navigateTo('numeriUtiliRubrica')" class="dashboard-item" style="grid-column: 1 / -1;">
+                            <div class="dashboard-card" style="aspect-ratio: auto; height: 80px; flex-direction: row; justify-content: flex-start; gap: 1.5rem; padding: 1rem 1.5rem;">
+                                <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M20,2H4A2,2 0 0,0 2,4V20A2,2 0,0,0 4,22H20A2,2 0,0,0 22,20V4A2,2 0,0,0 20,2M12,6A3,3 0,0,1 15,9A3,3 0,0,1 12,12A3,3 0,0,1 9,9A3,3 0,0,1 12,6M18,20H6V18.6C6,16.6 10,15.5 12,15.5C14,15.5 18,16.6 18,18.6V20Z"/></svg>
+                                <p style="text-align: left; font-size: 1.1rem;">Rubrica Completa</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </main>
-            ${renderBottomNavigation()}
-        `;
+                </main>
+                ${renderBottomNavigation()}
+                `;
+            } else {
+                // All other users go directly to Rubrica Completa
+                return `
+                ${renderHeader('Numeri Utili')}
+                <main>
+                    <div class="dashboard-grid">
+                        <div onclick="navigateTo('numeriUtiliRubrica')" class="dashboard-item" style="grid-column: 1 / -1;">
+                            <div class="dashboard-card" style="aspect-ratio: auto; height: 80px; flex-direction: row; justify-content: flex-start; gap: 1.5rem; padding: 1rem 1.5rem;">
+                                <svg fill="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px; flex-shrink: 0;"><path d="M20,2H4A2,2 0,0,0 2,4V20A2,2 0,0,0 4,22H20A2,2 0,0,0 22,20V4A2,2 0,0,0 20,2M12,6A3,3 0,0,1 15,9A3,3 0,0,1 12,12A3,3 0,0,1 9,9A3,3 0,0,1 12,6M18,20H6V18.6C6,16.6 10,15.5 12,15.5C14,15.5 18,16.6 18,18.6V20Z"/></svg>
+                                <p style="text-align: left; font-size: 1.1rem;">Rubrica Completa</p>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                ${renderBottomNavigation()}
+                `;
+            }
+        };
 
         const renderNumeriUtiliImportati = () => {
             const canImport = userProfile?.tipoUtente === 'supervisore';
-            const importSectionHtml = canImport ? `
+            
+            if (!canImport) {
+                return `
+                ${renderHeader('Accesso Negato')}
+                <main>
+                    <div class="card">
+                        <div style="text-align: center; padding: 2rem;">
+                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 64px; height: 64px; color: var(--danger); margin: 0 auto 1rem;">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+                            </svg>
+                            <h3 style="color: var(--danger); margin-bottom: 1rem;">Accesso Negato</h3>
+                            <p style="color: var(--secondary-text); margin-bottom: 1.5rem;">Non hai i permessi per accedere a questa sezione.</p>
+                            <button onclick="navigateTo('infoUtili')" class="btn btn-primary">Torna ai Numeri Utili</button>
+                        </div>
+                    </div>
+                </main>
+                ${renderBottomNavigation()}
+                `;
+            }
+            
+            const importSectionHtml = `
                 <div class="flex gap-4 mt-4">
                     <button id="trigger-phone-import-btn" class="btn btn-primary flex-grow">Importa Nuovo File</button>
                     <button onclick="navigateTo('importazione')" class="btn btn-secondary">Gestione Avanzata</button>
                 </div>
                 <input type="file" id="info-utili-phone-import-input" class="hidden" accept=".xlsx, .xls">
                 <div id="info-utili-import-message" class="message-box mt-4"></div>
-            ` : '';
+            `;
 
             return `
             ${renderHeader('Contatti Importati')}
@@ -1085,7 +1136,27 @@
 
         const renderNumeriUtiliManuali = () => {
             const canManage = userProfile?.tipoUtente === 'supervisore';
-            const addFormHtml = canManage ? `
+            
+            if (!canManage) {
+                return `
+                ${renderHeader('Accesso Negato')}
+                <main>
+                    <div class="card">
+                        <div style="text-align: center; padding: 2rem;">
+                            <svg fill="currentColor" viewBox="0 0 24 24" style="width: 64px; height: 64px; color: var(--danger); margin: 0 auto 1rem;">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/>
+                            </svg>
+                            <h3 style="color: var(--danger); margin-bottom: 1rem;">Accesso Negato</h3>
+                            <p style="color: var(--secondary-text); margin-bottom: 1.5rem;">Non hai i permessi per accedere a questa sezione.</p>
+                            <button onclick="navigateTo('infoUtili')" class="btn btn-primary">Torna ai Numeri Utili</button>
+                        </div>
+                    </div>
+                </main>
+                ${renderBottomNavigation()}
+                `;
+            }
+            
+            const addFormHtml = `
                 <form id="add-useful-number-form" class="space-y-4" style="margin-bottom: 2rem;">
                     <div><label for="nu-title" class="form-label">INTERVENTO RICHIESTO</label><input type="text" id="nu-title" required class="form-input" placeholder="Es. Idraulico, Elettricista..."></div>
                     <div><label for="nu-company" class="form-label">IMPRESA (Opzionale)</label><input type="text" id="nu-company" class="form-input" placeholder="Nome dell'azienda"></div>
@@ -1093,7 +1164,7 @@
                     <div><label for="nu-number-2" class="form-label">2 NUM. TELEFONICO (Opzionale)</label><input type="text" id="nu-number-2" class="form-input" placeholder="Numero di telefono secondario"></div>
                     <div class="flex justify-end"><button type="submit" class="btn btn-primary">Aggiungi Contatto</button></div>
                 </form>
-            ` : '';
+            `;
 
             return `
             ${renderHeader('Contatti Manuali')}
@@ -1595,8 +1666,14 @@
                 case 'segnalazioni': content = renderSegnalazioni(); break;
                 case 'profilo': content = renderProfilo(); break;
                 case 'infoUtili': content = renderInfoUtili(); break;
-                case 'numeriUtiliImportati': content = renderNumeriUtiliImportati(); break;
-                case 'numeriUtiliManuali': content = renderNumeriUtiliManuali(); break;
+                case 'numeriUtiliImportati': 
+                    if (userType === 'supervisore') content = renderNumeriUtiliImportati(); 
+                    else navigateTo('dashboard');
+                    break;
+                case 'numeriUtiliManuali': 
+                    if (userType === 'supervisore') content = renderNumeriUtiliManuali(); 
+                    else navigateTo('dashboard');
+                    break;
                 case 'numeriUtiliRubrica': content = renderNumeriUtiliRubrica(); break;
                 case 'userManagement': 
                     if (['supervisore', 'adm'].includes(userType)) content = renderUserManagement(); 
@@ -1644,8 +1721,10 @@
                 case 'infoUtili': /* No handlers needed for the menu page */ break;
                 case 'numeriUtiliImportati':
                 case 'numeriUtiliManuali':
-                    loadUsefulNumbers(); 
-                    setupInfoUtiliHandlers(); 
+                    if (userType === 'supervisore') {
+                        loadUsefulNumbers(); 
+                        setupInfoUtiliHandlers(); 
+                    }
                     break;
                 case 'numeriUtiliRubrica':
                     loadRubricaNumbers();
