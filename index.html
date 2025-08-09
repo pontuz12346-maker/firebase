@@ -994,8 +994,8 @@
         `;
 
         const renderNumeriUtiliImportati = () => {
-            const canManage = ['amministratore', 'supervisore', 'adm'].includes(userProfile?.tipoUtente);
-            const importSectionHtml = canManage ? `
+            const canImport = userProfile?.tipoUtente === 'supervisore';
+            const importSectionHtml = canImport ? `
                 <div class="flex gap-4 mt-4">
                     <button id="trigger-phone-import-btn" class="btn btn-primary flex-grow">Importa Nuovo File</button>
                     <button onclick="navigateTo('importazione')" class="btn btn-secondary">Gestione Avanzata</button>
@@ -1022,7 +1022,7 @@
         };
 
         const renderNumeriUtiliManuali = () => {
-            const canManage = ['amministratore', 'supervisore', 'adm'].includes(userProfile?.tipoUtente);
+            const canManage = userProfile?.tipoUtente === 'supervisore';
             const addFormHtml = canManage ? `
                 <form id="add-useful-number-form" class="space-y-4" style="margin-bottom: 2rem;">
                     <div><label for="nu-title" class="form-label">INTERVENTO RICHIESTO</label><input type="text" id="nu-title" required class="form-input" placeholder="Es. Idraulico, Elettricista..."></div>
@@ -1562,7 +1562,7 @@
                     else navigateTo('dashboard');
                     break;
                 case 'importazione':
-                    if (['supervisore', 'adm'].includes(userType)) content = renderImportazione();
+                    if (userType === 'supervisore') content = renderImportazione();
                     else navigateTo('dashboard');
                     break;
                 case 'reportPage':
@@ -1601,7 +1601,7 @@
                 case 'gestioneGruppi': /* No handlers needed for the menu page */ break;
                 case 'gestioneGruppi_lista': if (['supervisore', 'adm'].includes(userType)) { loadPartialCondos(); setupUserManagementHandlers(); } break;
                 case 'gestioneGruppi_regole': if (['supervisore', 'adm'].includes(userType)) { loadGroupRules(); setupGestioneGruppiHandlers(); } break;
-                case 'importazione': if (['supervisore', 'adm'].includes(userType)) { setupImportazioneHandlers(); } break;
+                case 'importazione': if (userType === 'supervisore') { setupImportazioneHandlers(); } break;
                 case 'impostazioniSondaggi': if (['supervisore', 'adm'].includes(userType)) { setupImpostazioniSondaggiHandlers(); } break;
             }
 
@@ -1958,6 +1958,13 @@
             if (manualForm) {
                 manualForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    
+                    // Controllo accesso: solo supervisore può aggiungere contatti
+                    if (userProfile?.tipoUtente !== 'supervisore') {
+                        alert('Non hai i permessi per aggiungere contatti. Solo i supervisori possono eseguire questa operazione.');
+                        return;
+                    }
+                    
                     const title = document.getElementById('nu-title').value.trim();
                     const company = document.getElementById('nu-company').value.trim();
                     const number = document.getElementById('nu-number').value.trim();
@@ -1986,6 +1993,14 @@
                 fileInput.addEventListener('change', (event) => {
                     const file = event.target.files[0];
                     if (!file) return;
+                    
+                    // Controllo accesso: solo supervisore può importare file
+                    if (userProfile?.tipoUtente !== 'supervisore') {
+                        alert('Non hai i permessi per importare file. Solo i supervisori possono eseguire questa operazione.');
+                        fileInput.value = '';
+                        return;
+                    }
+                    
                     messageBox.className = 'message-box';
                     messageBox.textContent = 'Lettura del file in corso...';
                     messageBox.style.display = 'block';
@@ -2601,6 +2616,12 @@
         };
 
         const deleteUsefulNumber = async (id) => {
+            // Controllo accesso: solo supervisore può eliminare contatti
+            if (userProfile?.tipoUtente !== 'supervisore') {
+                alert('Non hai i permessi per eliminare contatti. Solo i supervisori possono eseguire questa operazione.');
+                return;
+            }
+            
             if (!confirm('Sei sicuro di voler eliminare questo numero?')) {
                 return;
             }
@@ -3126,7 +3147,7 @@
         const loadUsefulNumbers = () => {
             const manualTableBody = document.getElementById('useful-numbers-table-body');
             const importedTableContainer = document.getElementById('imported-numbers-table-container');
-            const canManage = ['amministratore', 'supervisore', 'adm'].includes(userProfile?.tipoUtente);
+            const canManage = userProfile?.tipoUtente === 'supervisore';
             if (manualTableBody) {
                 const qManual = query(collection(db, "usefulNumbers"), orderBy("createdAt", "desc"));
                 onSnapshot(qManual, (snapshot) => {
