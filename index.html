@@ -1025,10 +1025,10 @@
             const canManage = ['amministratore', 'supervisore', 'adm'].includes(userProfile?.tipoUtente);
             const addFormHtml = canManage ? `
                 <form id="add-useful-number-form" class="space-y-4" style="margin-bottom: 2rem;">
-                    <div><label for="nu-title" class="form-label">Intervento richiesto</label><input type="text" id="nu-title" required class="form-input" placeholder="Es. Idraulico, Elettricista..."></div>
-                    <div><label for="nu-company" class="form-label">Impresa (Opzionale)</label><input type="text" id="nu-company" class="form-input" placeholder="Nome dell'azienda"></div>
-                    <div><label for="nu-number" class="form-label">1 num. Telefonico</label><input type="text" id="nu-number" required class="form-input" placeholder="Numero di telefono principale"></div>
-                    <div><label for="nu-number-2" class="form-label">2 num. Telefonico (Opzionale)</label><input type="text" id="nu-number-2" class="form-input" placeholder="Numero di telefono secondario"></div>
+                    <div><label for="nu-title" class="form-label">INTERVENTO RICHIESTO</label><input type="text" id="nu-title" required class="form-input" placeholder="Es. Idraulico, Elettricista..."></div>
+                    <div><label for="nu-company" class="form-label">IMPRESA (Opzionale)</label><input type="text" id="nu-company" class="form-input" placeholder="Nome dell'azienda"></div>
+                    <div><label for="nu-number" class="form-label">1 NUM. TELEFONICO</label><input type="text" id="nu-number" required class="form-input" placeholder="Numero di telefono principale"></div>
+                    <div><label for="nu-number-2" class="form-label">2 NUM. TELEFONICO (Opzionale)</label><input type="text" id="nu-number-2" class="form-input" placeholder="Numero di telefono secondario"></div>
                     <div class="flex justify-end"><button type="submit" class="btn btn-primary">Aggiungi Contatto</button></div>
                 </form>
             ` : '';
@@ -1043,11 +1043,11 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Intervento richiesto</th>
-                                    <th>Impresa</th>
-                                    <th>1 num.Telefonico</th>
-                                    <th>2 num.Telefonico</th>
-                                    <th style="text-align:right;">Azione</th>
+                                    <th>INTERVENTO RICHIESTO</th>
+                                    <th>IMPRESA</th>
+                                    <th>1 NUM. TELEFONICO</th>
+                                    <th>2 NUM. TELEFONICO</th>
+                                    <th style="text-align:right;">AZIONE</th>
                                 </tr>
                             </thead>
                             <tbody id="useful-numbers-table-body">
@@ -1963,7 +1963,7 @@
                     const number = document.getElementById('nu-number').value.trim();
                     const number2 = document.getElementById('nu-number-2').value.trim();
                     if (!title || !number) {
-                        alert('I campi "Intervento richiesto" e "1 num. Telefonico" sono obbligatori.');
+                        alert('I campi "INTERVENTO RICHIESTO" e "1 NUM. TELEFONICO" sono obbligatori.');
                         return;
                     }
                     try {
@@ -2653,12 +2653,14 @@
                          return;
                     }
                     const headers = Object.keys(data[0]);
+                    const { headers: orderedHeaders, data: orderedData } = reorderColumns(data, headers);
+                    
                     let tableHTML = '<table class="data-table"><thead><tr>';
-                    headers.forEach(h => tableHTML += `<th>${h}</th>`);
+                    orderedHeaders.forEach(h => tableHTML += `<th>${h}</th>`);
                     tableHTML += '</tr></thead><tbody>';
-                    data.forEach(row => {
+                    orderedData.forEach(row => {
                         tableHTML += '<tr>';
-                        headers.forEach(h => tableHTML += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
+                        orderedHeaders.forEach(h => tableHTML += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
                         tableHTML += '</tr>';
                     });
                     tableHTML += '</tbody></table>';
@@ -2677,10 +2679,10 @@
                     let tableHTML = `<table class="data-table">
                         <thead>
                             <tr>
-                                <th>Intervento richiesto</th>
-                                <th>Impresa</th>
-                                <th>1 num.Telefonico</th>
-                                <th>2 num.Telefonico</th>
+                                <th>INTERVENTO RICHIESTO</th>
+                                <th>IMPRESA</th>
+                                <th>1 NUM. TELEFONICO</th>
+                                <th>2 NUM. TELEFONICO</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -3073,6 +3075,54 @@
             }
         };
 
+        // Funzione helper per riordinare le colonne secondo la sequenza richiesta
+        const reorderColumns = (data, headers) => {
+            const desiredOrder = ['INTERVENTO RICHIESTO', 'IMPRESA', '1 NUM. TELEFONICO', '2 NUM. TELEFONICO', 'AZIONE'];
+            
+            // Mappa per convertire i nomi delle colonne esistenti
+            const columnMapping = {
+                'Intervento richiesto': 'INTERVENTO RICHIESTO',
+                'Impresa': 'IMPRESA',
+                '1 num.Telefonico': '1 NUM. TELEFONICO',
+                '1 num. Telefonico': '1 NUM. TELEFONICO',
+                '2 num.Telefonico': '2 NUM. TELEFONICO',
+                '2 num. Telefonico': '2 NUM. TELEFONICO',
+                'Azione': 'AZIONE'
+            };
+            
+            // Trova le colonne corrispondenti nell'ordine desiderato
+            const orderedHeaders = [];
+            const orderedData = [];
+            
+            desiredOrder.forEach(desiredCol => {
+                const foundHeader = headers.find(h => {
+                    const normalizedH = h.trim();
+                    return normalizedH === desiredCol || columnMapping[normalizedH] === desiredCol;
+                });
+                if (foundHeader) {
+                    orderedHeaders.push(desiredCol);
+                    // Riorganizza i dati per questa colonna
+                    data.forEach((row, rowIndex) => {
+                        if (!orderedData[rowIndex]) orderedData[rowIndex] = {};
+                        orderedData[rowIndex][desiredCol] = row[foundHeader];
+                    });
+                }
+            });
+            
+            // Aggiungi le colonne rimanenti che non sono nell'ordine desiderato
+            headers.forEach(h => {
+                if (!orderedHeaders.includes(h) && !Object.values(columnMapping).includes(h)) {
+                    orderedHeaders.push(h);
+                    data.forEach((row, rowIndex) => {
+                        if (!orderedData[rowIndex]) orderedData[rowIndex] = {};
+                        orderedData[rowIndex][h] = row[h];
+                    });
+                }
+            });
+            
+            return { headers: orderedHeaders, data: orderedData };
+        };
+
         const loadUsefulNumbers = () => {
             const manualTableBody = document.getElementById('useful-numbers-table-body');
             const importedTableContainer = document.getElementById('imported-numbers-table-container');
@@ -3104,12 +3154,14 @@
                          return;
                     }
                     const headers = Object.keys(data[0]);
+                    const { headers: orderedHeaders, data: orderedData } = reorderColumns(data, headers);
+                    
                     let tableHTML = '<table class="data-table"><thead><tr>';
-                    headers.forEach(h => tableHTML += `<th>${h}</th>`);
+                    orderedHeaders.forEach(h => tableHTML += `<th>${h}</th>`);
                     tableHTML += '</tr></thead><tbody>';
-                    data.forEach(row => {
+                    orderedData.forEach(row => {
                         tableHTML += '<tr>';
-                        headers.forEach(h => tableHTML += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
+                        orderedHeaders.forEach(h => tableHTML += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
                         tableHTML += '</tr>';
                     });
                     tableHTML += '</tbody></table>';
