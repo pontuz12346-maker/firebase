@@ -706,7 +706,7 @@
                  renderCurrentPage();
                  return;
             }
-            if(userType==="custode"&&["dashboard","bacheca","sondaggi"].includes(e)){
+            if(userType==="custode"&&["dashboard","bacheca","sondaggi","sondaggi_crea","sondaggi_elenco","sondaggi_attivi","sondaggi_conclusi"].includes(e)){
                 navigateTo("segnalazioni");
             } else {
                 currentPage=e,renderCurrentPage();
@@ -839,7 +839,7 @@
                     <a href="#" onclick="navigateTo('dashboard')" class="nav-item ${currentPage === 'dashboard' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></a>
                     <a href="#" onclick="navigateTo('bacheca')" id="nav-item-bacheca" class="nav-item ${currentPage === 'bacheca' ? 'active' : ''}"><span id="bacheca-notification-badge" class="notification-badge hidden"></span><svg fill="currentColor" viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg><span>Bacheca</span></a>
                     <a href="#" onclick="navigateTo('segnalazioni')" class="nav-item ${currentPage === 'segnalazioni' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"/></svg><span>Segnala</span></a>
-                    <a href="#" onclick="navigateTo('sondaggi')" class="nav-item ${['sondaggi', 'sondaggi_crea', 'sondaggi_elenco'].includes(currentPage) ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg><span>Sondaggi</span></a>
+                    <a href="#" onclick="navigateTo('sondaggi')" class="nav-item ${['sondaggi', 'sondaggi_crea', 'sondaggi_elenco', 'sondaggi_attivi', 'sondaggi_conclusi'].includes(currentPage) ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/></svg><span>Sondaggi</span></a>
                     <a href="#" onclick="navigateTo('profilo')" class="nav-item ${currentPage === 'profilo' ? 'active' : ''}"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/></svg><span>Profilo</span></a>
                 `;
             return `<nav class="bottom-nav">${navItems}</nav>`;
@@ -925,6 +925,18 @@
                         </div>
                         <p>Elenco Sondaggi</p>
                     </div>
+                    <div onclick="navigateTo('sondaggi_attivi')" class="dashboard-item">
+                        <div class="dashboard-card">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <p>Sondaggi Attivi</p>
+                    </div>
+                    <div onclick="navigateTo('sondaggi_conclusi')" class="dashboard-item">
+                        <div class="dashboard-card">
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </div>
+                        <p>Sondaggi Conclusi</p>
+                    </div>
                 </div>
             </main>
             ${renderBottomNavigation()}
@@ -971,6 +983,46 @@
                 <div class="card" style="margin-bottom: 1rem;">
                     <div style="margin-bottom: 1rem;">
                         <input type="text" id="poll-search" placeholder="Cerca sondaggi per parole chiave..." class="form-input w-full">
+                    </div>
+                    <div>
+                        <select id="poll-type-filter" class="form-select w-full">
+                            <option value="">Tutti i tipi</option>
+                            <option value="supervisor-consiglieri">Supervisor e Consiglieri</option>
+                            <option value="condomini">Condomini</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="polls-container" class="list-container"></div>
+            </main>
+            ${renderBottomNavigation()}
+        `;
+
+        const renderSondaggiAttivi = () => `
+            ${renderHeader('Sondaggi Attivi')}
+            <main>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" id="poll-search" placeholder="Cerca sondaggi attivi per parole chiave..." class="form-input w-full">
+                    </div>
+                    <div>
+                        <select id="poll-type-filter" class="form-select w-full">
+                            <option value="">Tutti i tipi</option>
+                            <option value="supervisor-consiglieri">Supervisor e Consiglieri</option>
+                            <option value="condomini">Condomini</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="polls-container" class="list-container"></div>
+            </main>
+            ${renderBottomNavigation()}
+        `;
+
+        const renderSondaggiConclusi = () => `
+            ${renderHeader('Sondaggi Conclusi')}
+            <main>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" id="poll-search" placeholder="Cerca sondaggi conclusi per parole chiave..." class="form-input w-full">
                     </div>
                     <div>
                         <select id="poll-type-filter" class="form-select w-full">
@@ -1690,6 +1742,8 @@
                 case 'sondaggi': if (userType !== 'custode') { content = await renderSondaggiMenu(); } break;
                 case 'sondaggi_crea': if (userType !== 'custode') { content = renderSondaggiCrea(); } break;
                 case 'sondaggi_elenco': if (userType !== 'custode') { content = renderSondaggiElenco(); } break;
+                case 'sondaggi_attivi': if (userType !== 'custode') { content = renderSondaggiAttivi(); } break;
+                case 'sondaggi_conclusi': if (userType !== 'custode') { content = renderSondaggiConclusi(); } break;
                 case 'segnalazioni': content = renderSegnalazioni(); break;
                 case 'profilo': content = renderProfilo(); break;
                 case 'infoUtili': content = renderInfoUtili(); break;
@@ -1746,11 +1800,29 @@
                 case 'sondaggi_crea': if (userType !== 'custode') { setupPollHandlers(); } break;
                 case 'sondaggi_elenco': 
                     if (userType !== 'custode') { 
-                        loadPolls(); 
+                        loadPolls('all'); 
                         const searchInput = document.getElementById('poll-search');
                         const typeFilter = document.getElementById('poll-type-filter');
-                        searchInput?.addEventListener('input', loadPolls);
-                        typeFilter?.addEventListener('change', loadPolls);
+                        searchInput?.addEventListener('input', () => loadPolls('all'));
+                        typeFilter?.addEventListener('change', () => loadPolls('all'));
+                    } 
+                    break;
+                case 'sondaggi_attivi': 
+                    if (userType !== 'custode') { 
+                        loadPolls('active'); 
+                        const searchInput = document.getElementById('poll-search');
+                        const typeFilter = document.getElementById('poll-type-filter');
+                        searchInput?.addEventListener('input', () => loadPolls('active'));
+                        typeFilter?.addEventListener('change', () => loadPolls('active'));
+                    } 
+                    break;
+                case 'sondaggi_conclusi': 
+                    if (userType !== 'custode') { 
+                        loadPolls('closed'); 
+                        const searchInput = document.getElementById('poll-search');
+                        const typeFilter = document.getElementById('poll-type-filter');
+                        searchInput?.addEventListener('input', () => loadPolls('closed'));
+                        typeFilter?.addEventListener('change', () => loadPolls('closed'));
                     } 
                     break;
                 case 'segnalazioni': loadReports(); setupReportHandlers(); break;
@@ -3495,7 +3567,7 @@
             }
         };
 
-        const loadPolls = () => {
+        const loadPolls = (status = 'all') => {
             const container = document.getElementById("polls-container");
             if (!container) return;
             
@@ -3506,7 +3578,13 @@
                 const q = query(collection(db, "polls"), orderBy("createdAt", "desc"));
                 onSnapshot(q, snapshot => {
                     if (snapshot.empty) {
-                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">Nessun sondaggio disponibile.</p></div>`;
+                        let message = 'Nessun sondaggio disponibile.';
+                        if (status === 'active') {
+                            message = 'Nessun sondaggio attivo disponibile.';
+                        } else if (status === 'closed') {
+                            message = 'Nessun sondaggio concluso disponibile.';
+                        }
+                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">${message}</p></div>`;
                         return;
                     }
                     
@@ -3514,9 +3592,17 @@
                     const searchTerm = document.getElementById('poll-search')?.value?.toLowerCase() || '';
                     const typeFilter = document.getElementById('poll-type-filter')?.value || '';
                     
-                    // Filter polls based on search and type
+                    // Filter polls based on search, type, and status
                     let filteredPolls = snapshot.docs.filter(docSnap => {
                         const poll = docSnap.data();
+                        
+                        // Filter by status (active/closed)
+                        if (status !== 'all') {
+                            const deadline = poll.deadline?.toDate();
+                            const isExpired = deadline && deadline < new Date();
+                            if (status === 'active' && isExpired) return false;
+                            if (status === 'closed' && !isExpired) return false;
+                        }
                         
                         // Filter by type if specified
                         if (typeFilter && poll.pollType !== typeFilter) {
@@ -3535,7 +3621,13 @@
                     });
                     
                     if (filteredPolls.length === 0) {
-                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">Nessun sondaggio trovato con i criteri di ricerca.</p></div>`;
+                        let message = 'Nessun sondaggio trovato con i criteri di ricerca.';
+                        if (status === 'active') {
+                            message = 'Nessun sondaggio attivo trovato.';
+                        } else if (status === 'closed') {
+                            message = 'Nessun sondaggio concluso trovato.';
+                        }
+                        container.innerHTML = `<div class="card"><p style="color:var(--secondary-text); padding: 1rem 0;">${message}</p></div>`;
                         return;
                     }
                     
