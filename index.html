@@ -159,6 +159,27 @@
             background: var(--accent-color-dark);
         }
 
+        /* Input field styling in custom dialogs */
+        .custom-confirm-dialog .form-input {
+            background: var(--surface-color-light);
+            border: 1px solid var(--surface-color-light);
+            color: var(--primary-text);
+            font-size: 1rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            transition: border-color 0.2s ease;
+        }
+
+        .custom-confirm-dialog .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+        }
+
+        .custom-confirm-dialog .form-input::placeholder {
+            color: var(--secondary-text);
+        }
+
         /* Hide URL bar on mobile */
         @media (max-width: 768px) {
             body {
@@ -1100,6 +1121,80 @@
 
                 // Auto-focus on confirm button for better UX
                 setTimeout(() => confirmBtn.focus(), 100);
+            });
+        };
+
+        // Custom input dialog function
+        const customInput = (message, title = 'Input', placeholder = '', defaultValue = '', confirmText = 'Conferma', cancelText = 'Annulla') => {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('custom-confirm-overlay');
+                const titleEl = document.getElementById('custom-confirm-title');
+                const messageEl = document.getElementById('custom-confirm-message');
+                const confirmBtn = document.getElementById('custom-confirm-confirm');
+                const cancelBtn = document.getElementById('custom-confirm-cancel');
+
+                // Create input field
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                inputField.className = 'form-input';
+                inputField.placeholder = placeholder;
+                inputField.value = defaultValue;
+                inputField.style.marginBottom = '1rem';
+                inputField.style.width = '100%';
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                confirmBtn.textContent = confirmText;
+                cancelBtn.textContent = cancelText;
+
+                // Insert input field after message
+                messageEl.appendChild(document.createElement('br'));
+                messageEl.appendChild(inputField);
+
+                overlay.style.display = 'flex';
+
+                const handleConfirm = () => {
+                    const value = inputField.value.trim();
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(value);
+                };
+
+                const handleCancel = () => {
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(null);
+                };
+
+                const cleanup = () => {
+                    confirmBtn.removeEventListener('click', handleConfirm);
+                    cancelBtn.removeEventListener('click', handleCancel);
+                    overlay.removeEventListener('click', handleOverlayClick);
+                    // Remove input field
+                    if (messageEl.contains(inputField)) {
+                        messageEl.removeChild(inputField);
+                    }
+                };
+
+                const handleOverlayClick = (e) => {
+                    if (e.target === overlay) {
+                        handleCancel();
+                    }
+                };
+
+                const handleKeyPress = (e) => {
+                    if (e.key === 'Enter') {
+                        handleConfirm();
+                    }
+                };
+
+                confirmBtn.addEventListener('click', handleConfirm);
+                cancelBtn.addEventListener('click', handleCancel);
+                overlay.addEventListener('click', handleOverlayClick);
+                inputField.addEventListener('keypress', handleKeyPress);
+
+                // Auto-focus on input field
+                setTimeout(() => inputField.focus(), 100);
             });
         };
 
@@ -3175,9 +3270,7 @@
                 return;
             }
 
-            const confirmationText = prompt(`Questa azione è irreversibile. Per confermare, digita "ELIMINA" nel campo sottostante.`);
-            if (confirmationText !== 'ELIMINA') {
-                alert("Operazione annullata. La parola di conferma non è corretta.");
+            if (!(await customConfirm(`Questa azione è irreversibile. Sei sicuro di voler procedere?`, 'Conferma Azione', 'Conferma', 'Annulla'))) {
                 return;
             }
 
@@ -7698,8 +7791,8 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
 
         const handleRenameFolder = async (oldPath) => {
             const oldName = oldPath.split('/').filter(Boolean).pop();
-            const newName = prompt("Inserisci il nuovo nome per la cartella:", oldName);
-
+            const newName = await customInput(`Inserisci il nuovo nome per la cartella:`, 'Rinomina Cartella', 'Nome cartella', oldName, 'Conferma', 'Annulla');
+            
             if (!newName || newName.trim() === '' || newName.includes('/')) {
                 alert("Nome non valido.");
                 return;
@@ -7742,7 +7835,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
 };
 
         const handleCreateFolder = async () => {
-            const folderName = prompt("Inserisci il nome della nuova cartella:");
+            const folderName = await customInput("Inserisci il nome della nuova cartella:", "Crea Cartella", "Nome cartella", "", "Crea", "Annulla");
             if (!folderName || folderName.trim() === '') return;
 
             // In Storage, le cartelle sono create caricando un file placeholder al loro interno.
@@ -7874,6 +7967,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         
                 window.navigateTo = navigateTo;
         window.customConfirm = customConfirm;
+        window.customInput = customInput;
         window.navigateBack = navigateBack;
         window.logout = logout;
         window.voteOnPoll = voteOnPoll;
