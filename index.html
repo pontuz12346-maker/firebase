@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Con-bridge">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#121212">
+    <meta name="msapplication-config" content="none">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMjIiIGZpbGw9IiMxRUI5NTQiLz4KPHN2ZyB4PSI0NSIgeT0iNDUiIHdpZHRoPSI5MCIgaGVpZ2h0PSI5MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyeiBNMTIgMjBjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4eiIvPgo8cGF0aCBkPSJNMTIgNkM5Ljc5IDYgOCA3Ljc5IDggMTBzMS43OSA0IDQgNCA0LTEuNzkgNC00LTEuNzktNC00LTR6bTAgNmMtMS4xIDAtMi0uOS0yLTJzLjktMiAyLTIgMiAuOSAyIDItLjkgMi0yIDJ6Ii8+CjxwYXRoIGQ9Ik0xMiAxNGMtMi42NyAwLTguMTMgMS4zNC04IDEwLjAxaDE2Yy4xMy04LjY3LTUuMzMtMTAtOC0xMHoiLz4KPC9zdmc+Cjwvc3ZnPgo=">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Con-bridge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,6 +62,194 @@
         
         body::-webkit-scrollbar { display: none; }
         body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Confirmation Dialog Styles */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .custom-confirm-dialog {
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            max-width: 90vw;
+            width: 400px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--surface-color-light);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .custom-confirm-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-text);
+        }
+
+        .custom-confirm-message {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-text);
+        }
+
+        .custom-confirm-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .custom-confirm-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 80px;
+        }
+
+        .custom-confirm-btn.cancel {
+            background: var(--surface-color-light);
+            color: var(--secondary-text);
+        }
+
+        .custom-confirm-btn.cancel:hover {
+            background: var(--surface-color-light);
+            opacity: 0.8;
+        }
+
+        .custom-confirm-btn.confirm {
+            background: var(--danger);
+            color: white;
+        }
+
+        .custom-confirm-btn.confirm:hover {
+            background: #c0392b;
+        }
+
+        .custom-confirm-btn.confirm.primary {
+            background: var(--accent-color);
+        }
+
+        .custom-confirm-btn.confirm.primary:hover {
+            background: var(--accent-color-dark);
+        }
+
+        /* Hide URL bar on mobile */
+        @media (max-width: 768px) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+
+        /* Prevent text selection on mobile */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Allow text selection in inputs and textareas */
+        input, textarea, [contenteditable] {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            /* Improve touch targets */
+            .btn, .btn-primary, .btn-secondary, .btn-danger, .btn-icon {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Better spacing for mobile */
+            .card {
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            /* Improve form inputs on mobile */
+            .form-input, .form-select {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 0.75rem;
+            }
+
+            /* Better modal positioning on mobile */
+            .modal-content {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+                overflow-y: auto;
+            }
+
+            /* Improve navigation on mobile */
+            .nav-item {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            /* Better dashboard grid on mobile */
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            /* Improve confirmation dialog on mobile */
+            .custom-confirm-dialog {
+                margin: 1rem;
+                width: calc(100vw - 2rem);
+                max-width: none;
+            }
+
+            .custom-confirm-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .custom-confirm-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Prevent pull-to-refresh on mobile */
+        body {
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Improve scrolling performance */
+        * {
+            -webkit-overflow-scrolling: touch;
+        }
 
 
         /* 2. Componenti UI Ridisegnati */
@@ -653,8 +852,20 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-<body>
-    <div id="app"></div>
+    <body>
+        <!-- Custom Confirmation Dialog -->
+        <div id="custom-confirm-overlay" class="custom-confirm-overlay" style="display: none;">
+            <div class="custom-confirm-dialog">
+                <div class="custom-confirm-title" id="custom-confirm-title"></div>
+                <div class="custom-confirm-message" id="custom-confirm-message"></div>
+                <div class="custom-confirm-buttons">
+                    <button class="custom-confirm-btn cancel" id="custom-confirm-cancel">Annulla</button>
+                    <button class="custom-confirm-btn confirm" id="custom-confirm-confirm">Conferma</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="app"></div>
 
     <div id="modal-container" class="modal-overlay hidden">
         <div class="modal-content">
@@ -837,6 +1048,61 @@
         const resetPassword=async t=>await sendPasswordResetEmail(auth,t);
         const loadUserProfile=async t=>{if(t){const e=await getDoc(doc(db,"users",t.uid));e.exists()&&(userProfile=e.data())}};
         
+        // Custom confirmation dialog function
+        const customConfirm = (message, title = 'Conferma', confirmText = 'Conferma', cancelText = 'Annulla', isPrimary = false) => {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('custom-confirm-overlay');
+                const titleEl = document.getElementById('custom-confirm-title');
+                const messageEl = document.getElementById('custom-confirm-message');
+                const confirmBtn = document.getElementById('custom-confirm-confirm');
+                const cancelBtn = document.getElementById('custom-confirm-cancel');
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                confirmBtn.textContent = confirmText;
+                cancelBtn.textContent = cancelText;
+
+                if (isPrimary) {
+                    confirmBtn.classList.add('primary');
+                } else {
+                    confirmBtn.classList.remove('primary');
+                }
+
+                overlay.style.display = 'flex';
+
+                const handleConfirm = () => {
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(true);
+                };
+
+                const handleCancel = () => {
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    confirmBtn.removeEventListener('click', handleConfirm);
+                    cancelBtn.removeEventListener('click', handleCancel);
+                    overlay.removeEventListener('click', handleOverlayClick);
+                };
+
+                const handleOverlayClick = (e) => {
+                    if (e.target === overlay) {
+                        handleCancel();
+                    }
+                };
+
+                confirmBtn.addEventListener('click', handleConfirm);
+                cancelBtn.addEventListener('click', handleCancel);
+                overlay.addEventListener('click', handleOverlayClick);
+
+                // Auto-focus on confirm button for better UX
+                setTimeout(() => confirmBtn.focus(), 100);
+            });
+        };
+
         const navigateTo=(e)=>{
             const userType = userProfile?.tipoUtente;
 
@@ -878,11 +1144,44 @@
                 navigationHistory.push(e);
             }
 
+            // Update URL without page reload
+            const pageTitle = getPageTitle(e);
+            const url = `/${e}`;
+            history.pushState({ page: e, title: pageTitle }, pageTitle, url);
+            document.title = `Con-bridge - ${pageTitle}`;
+
             if(userType==="custode"&&["dashboard","bacheca","sondaggi","sondaggi_crea","sondaggi_elenco","sondaggi_attivi","sondaggi_conclusi"].includes(e)){
                 navigateTo("segnalazioni");
             } else {
                 currentPage=e,renderCurrentPage();
             }
+        };
+
+        // Get page title for URL updates
+        const getPageTitle = (page) => {
+            const titles = {
+                'dashboard': 'Dashboard',
+                'bacheca': 'Bacheca',
+                'segnalazioni': 'Segnalazioni',
+                'sondaggi': 'Sondaggi',
+                'infoUtili': 'Numeri Utili',
+                'profilo': 'Profilo',
+                'userManagement': 'Gestione Utenti',
+                'gestioneGruppi': 'Gestione Gruppi',
+                'importazione': 'Importazione',
+                'orariCustode': 'Orari Custode',
+                'datiAmministratore': 'Dati Amministratore',
+                'abilitaServizi': 'Abilita Servizi',
+                'cronologiaAttivita': 'Cronologia Attività',
+                'gestione_archivio': 'Gestione Archivio',
+                'impostazioniSondaggi': 'Impostazioni Sondaggi',
+                'puliziaDati': 'Pulizia Dati',
+                'reportPage': 'Report',
+                'elencoCondomini': 'Elenco Condomini',
+                'archivio': 'Archivio',
+                'login': 'Login'
+            };
+            return titles[page] || 'Pagina';
         };
 
         const navigateBack = () => {
@@ -893,6 +1192,14 @@
             }
             // Non fa nulla se non c'è una pagina precedente
         };
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.page) {
+                currentPage = event.state.page;
+                renderCurrentPage();
+            }
+        });
         
         const getPriorityColor=t=>({alta:"priority-alta",media:"priority-media",bassa:"priority-bassa"}[t]||"priority-bassa");
         const getStatusColor=t=>({aperta:"status-aperta","in-corso":"status-in-corso",risolta:"status-in-corso",chiusa:"status-chiusa"}[t]||"status-aperta");
@@ -2864,7 +3171,7 @@
                 polls: "sondaggi"
             }[type];
 
-            if (!confirm(`Sei sicuro di voler eliminare definitivamente ${idsToDelete.length} ${typeName}?`)) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare definitivamente ${idsToDelete.length} ${typeName}?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
 
@@ -4804,7 +5111,7 @@
         };
 
         const deletePartialCondo = async (id) => {
-            if (!confirm('Sei sicuro di voler eliminare questo gruppo? L\'azione è irreversibile.')) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo gruppo? L\'azione è irreversibile.', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
             try {
@@ -4931,7 +5238,7 @@
         };
 
         const deleteGroupRule = async (ruleId) => {
-            if (!confirm('Sei sicuro di voler eliminare questa regola?')) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa regola?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
             try {
                 await deleteDoc(doc(db, 'groupRules', ruleId));
                 await logActivity("group_rule_deleted", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { ruleId: ruleId });
@@ -5038,7 +5345,7 @@
                 return;
             }
             
-            if (!confirm('Sei sicuro di voler eliminare questo numero?')) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo numero?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
             try {
@@ -5107,7 +5414,7 @@
                 return;
             }
 
-            if (!confirm(`Sei sicuro di voler eliminare ${ids.length} contatti?`)) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare ${ids.length} contatti?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
 
@@ -5297,7 +5604,7 @@
                 return;
             }
 
-            if (!confirm('Sei sicuro di voler eliminare questo contatto importato?')) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo contatto importato?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
 
@@ -5331,7 +5638,7 @@
                 return;
             }
 
-            if (!confirm(`Sei sicuro di voler eliminare ${indices.length} contatti importati?`)) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare ${indices.length} contatti importati?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
 
@@ -5405,7 +5712,7 @@
                 alert('Non hai i permessi per eliminare questa voce.');
                 return;
             }
-            if (!confirm('Sei sicuro di voler eliminare questa riga dagli orari?')) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga dagli orari?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
 
             try {
                 const qSchedule = query(collection(db, "importedCustodeSchedule"), orderBy("uploadedAt", "desc"), limit(1));
@@ -5454,7 +5761,7 @@
         };
 
         const deleteImportedAdminEntry = async (index) => {
-            if (userProfile?.tipoUtente !== 'supervisore' || !confirm('Sei sicuro di voler eliminare questa voce?')) return;
+            if (userProfile?.tipoUtente !== 'supervisore' || !(await customConfirm('Sei sicuro di voler eliminare questa voce?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
             try {
                 const q = query(collection(db, "importedAdminData"), orderBy("uploadedAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
@@ -5834,7 +6141,7 @@
                 alert('Non hai i permessi per eliminare orari.');
                 return;
             }
-            if (!confirm('Sei sicuro di voler eliminare questa riga di orario?')) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga di orario?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
 
             try {
                 const docRef = doc(db, "importedCustodeSchedule", docId);
@@ -6509,7 +6816,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         };
 
         const deleteUser = async (userId, userName) => {
-            if (!confirm(`Sei sicuro di voler eliminare l'utente ${userName}? L'utente verrà rimosso dal sistema e non potrà più accedere. L'azione è irreversibile.`)) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare l'utente ${userName}? L'utente verrà rimosso dal sistema e non potrà più accedere. L'azione è irreversibile.`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
             try {
@@ -7111,7 +7418,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         };
 
         const sendReportReminder = async (reportId) => {
-            if (!confirm("Vuoi inviare un sollecito per questa segnalazione?")) return;
+            if (!(await customConfirm("Vuoi inviare un sollecito per questa segnalazione?", 'Conferma Sollecito', 'Invia', 'Annulla', true))) return;
             try {
                 const reportRef = doc(db, "reports", reportId);
                 await runTransaction(db, async (transaction) => {
@@ -7144,7 +7451,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
             if (isResolved) {
                 await updateReportStatus(reportId, 'chiusa', 'Utente ha confermato la risoluzione.');
             } else {
-                if (confirm("Sei sicuro che il problema non sia stato risolto? La segnalazione verrà riaperta.")) {
+                if (await customConfirm("Sei sicuro che il problema non sia stato risolto? La segnalazione verrà riaperta.", 'Conferma Riapertura', 'Riapri', 'Annulla', true)) {
                     await updateReportStatus(reportId, 'aperta', 'Utente ha indicato che il problema non è risolto. Segnalazione riaperta.');
                 }
             }
@@ -7470,7 +7777,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
 
         const handleDeleteItem = async (fullPath, isFolder) => {
             const itemType = isFolder ? "cartella" : "file";
-            if (!confirm(`Sei sicuro di voler eliminare questo ${itemType}? L'azione è irreversibile.`)) return;
+            if (!(await customConfirm(`Sei sicuro di voler eliminare questo ${itemType}? L'azione è irreversibile.`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
 
             if (isFolder) {
                 // La cancellazione di cartelle non vuote non è supportata direttamente dal client SDK.
@@ -7566,6 +7873,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         };
         
                 window.navigateTo = navigateTo;
+        window.customConfirm = customConfirm;
         window.navigateBack = navigateBack;
         window.logout = logout;
         window.voteOnPoll = voteOnPoll;
@@ -7622,7 +7930,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         window.handleBulkDelete = handleBulkDelete;
 
         const deletePoll = async (pollId) => {
-            if (!confirm('Sei sicuro di voler eliminare questo sondaggio? L\'azione è irreversibile.')) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo sondaggio? L\'azione è irreversibile.', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
                 return;
             }
             try {
@@ -7708,6 +8016,17 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                 navigateTo('login');
             }
         });
+
+        // Register service worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered successfully:', registration);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
-</html
+</html>
