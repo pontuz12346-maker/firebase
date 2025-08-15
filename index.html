@@ -7536,9 +7536,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                 res.prefixes.forEach(folderRef => {
                     const managementActions = canManage ? `
                         <div class="list-item-action flex gap-2">
-                            <button onclick="event.stopPropagation(); handleRenameFolder('${folderRef.fullPath}')" class="btn-icon" title="Rinomina Cartella" style="background:var(--accent-color); color:white;">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                            </button>
+
                             <button onclick="event.stopPropagation(); handleDeleteItem('${folderRef.fullPath}', true)" class="btn-icon" title="Elimina Cartella" style="background:var(--danger); color:white;">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                             </button>
@@ -7556,9 +7554,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                     if (itemRef.name === '.placeholder') return;
                     const managementActions = canManage ? `
                         <div class="list-item-action flex gap-2">
-                            <button onclick="event.stopPropagation(); handleRenameFile('${itemRef.fullPath}', '${itemRef.name}')" class="btn-icon" title="Rinomina File" style="background:var(--accent-color); color:white;">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                            </button>
+
                             <button onclick="event.stopPropagation(); handleDeleteItem('${itemRef.fullPath}', false)" class="btn-icon" title="Elimina File" style="background:var(--danger); color:white;">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v2h14V4z"/></svg>
                             </button>
@@ -7687,86 +7683,11 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
             document.getElementById('file-upload-input').click();
         };
 
-        const handleRenameFolder = async (oldPath) => {
-            const oldName = oldPath.split('/').filter(Boolean).pop();
-            const newName = prompt("Inserisci il nuovo nome per la cartella:", oldName);
 
-            if (!newName || newName.trim() === '' || newName.includes('/')) {
-                alert("Nome non valido.");
-                return;
-            }
-            if (newName === oldName) return;
 
-            const parentPath = oldPath.substring(0, oldPath.lastIndexOf(oldName));
-            const newPath = parentPath + newName.trim() + '/';
 
-            showModal('Ridenominazione in corso...', '<p>Questa operazione potrebbe richiedere alcuni istanti. Non chiudere la pagina.</p>');
 
-            try {
-                await moveFolderContents(oldPath, newPath);
-                await logActivity("folder_renamed", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { from: oldPath, to: newPath });
-                hideModal();
-                loadStorageItems(currentStoragePath);
-            } catch (error) {
-                console.error("Errore durante la ridenominazione:", error);
-                hideModal();
-                alert(`Errore: ${error.message}`);
-            }
-        };
 
-        const moveFolderContents = async (oldPath, newPath) => {
-    const listRef = ref(storage, oldPath);
-    const res = await listAll(listRef);
-
-    // 1. Sposta tutti i file dalla vecchia alla nuova posizione, uno alla volta (sequenziale).
-    for (const itemRef of res.items) {
-        const newFileRef = ref(storage, newPath + itemRef.name);
-        const blob = await getBlob(itemRef); // Usa getBlob per evitare problemi di CORS
-        await uploadBytes(newFileRef, blob);
-        await deleteObject(itemRef); // Elimina il vecchio file solo dopo la copia
-    }
-
-    // 2. Esegui la stessa operazione ricorsivamente per tutte le sottocartelle.
-    for (const folderRef of res.prefixes) {
-        await moveFolderContents(folderRef.fullPath, newPath + folderRef.name + '/');
-    }
-};
-
-        const handleRenameFile = async (fullPath, oldFileName) => {
-            const newFileName = prompt("Inserisci il nuovo nome per il file:", oldFileName);
-
-            if (!newFileName || newFileName.trim() === '' || newFileName.includes('/')) {
-                alert("Nome non valido.");
-                return;
-            }
-            if (newFileName === oldFileName) return;
-
-            const parentPath = fullPath.substring(0, fullPath.lastIndexOf(oldFileName));
-            const newPath = parentPath + newFileName.trim();
-
-            showModal('Ridenominazione in corso...', '<p>Questa operazione potrebbe richiedere alcuni istanti. Non chiudere la pagina.</p>');
-
-            try {
-                // Download the old file
-                const oldFileRef = ref(storage, fullPath);
-                const blob = await getBlob(oldFileRef);
-                
-                // Upload with new name
-                const newFileRef = ref(storage, newPath);
-                await uploadBytes(newFileRef, blob);
-                
-                // Delete the old file
-                await deleteObject(oldFileRef);
-                
-                await logActivity("file_renamed", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { from: fullPath, to: newPath });
-                hideModal();
-                loadStorageItems(currentStoragePath);
-            } catch (error) {
-                console.error("Errore durante la ridenominazione del file:", error);
-                hideModal();
-                alert(`Errore: ${error.message}`);
-            }
-        };
         const handleCreateFolder = async () => {
             const folderName = prompt("Inserisci il nome della nuova cartella:");
             if (!folderName || folderName.trim() === '') return;
@@ -7949,8 +7870,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         window.handleDeleteItem = handleDeleteItem;
         window.openUploadModal = openUploadModal;
         window.selectUploadPath = selectUploadPath;
-        window.handleRenameFolder = handleRenameFolder;
-        window.handleRenameFile = handleRenameFile;
+
         window.loadItemsForCleanup = loadItemsForCleanup;
         window.toggleAllForCleanup = toggleAllForCleanup;
         window.handleCleanupSelectionChange = handleCleanupSelectionChange;
