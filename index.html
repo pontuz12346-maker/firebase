@@ -1403,7 +1403,7 @@
                     <div onclick="navigateTo('gestioneGruppi')" class="dashboard-item">
                         <div class="dashboard-card">
                             <svg fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24-.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                                <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24-.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
                             </svg>
                         </div>
                         <p>${userProfile?.tipoUtente === 'adm' ? 'Funzioni Admin' : 'Funzioni Supervisore'}</p>
@@ -1698,7 +1698,7 @@
                 menuItemsHtml.push(`
                     <div onclick="navigateTo('segnalazioni_custode')" class="dashboard-item">
                         <div class="dashboard-card">
-                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
+                            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
                         </div>
                         <p>Al Custode</p>
                     </div>
@@ -1831,8 +1831,8 @@
             </main>
             ${renderBottomNavigation()}
         `;
-        
-                const renderInfoUtili = () => {
+
+        const renderInfoUtili = () => {
             const isSupervisore = userProfile?.tipoUtente === 'supervisore';
             
             if (isSupervisore) {
@@ -2772,7 +2772,6 @@
         ${renderBottomNavigation()}
     `;
 };
-
                 const renderCronologiaAttivita = () => `
             ${renderHeader('Cronologia Attività')}
             <main>
@@ -3207,7 +3206,6 @@
                 handleCleanupSelectionChange(type); // Ripristina il conteggio corretto
             }
         };
-
         const setupAbilitaServiziHandlers = async () => {
             const form = document.getElementById('service-permissions-form');
             if (!form) return;
@@ -3632,7 +3630,6 @@
                 checkForNewReports();
             }
         };
-
         const setupLoginHandlers = () => {
             let isRegistering = false;
             let localGroupedProperties = {};
@@ -4320,7 +4317,6 @@
             });
             return tableData;
         };
-
         const setupImportazioneHandlers = async () => {
             let partialCondosList = [];
             let activeRules = [];
@@ -4807,7 +4803,6 @@
         const setupInfoUtiliAmministratoreHandlers = () => {
             loadAndRenderAdminData('admin-data-summary-container', false);
         };
-
         const setupOrariCustodeImportHandlers = async () => {
             const fileInputOrariCustode = document.getElementById('excel-file-input-orari-custode');
             const tableContainerOrariCustode = document.getElementById('excel-table-container-orari-custode');
@@ -5305,7 +5300,6 @@
                 }).join('');
             });
         };
-
         const setupGestioneGruppiHandlers = () => {
             const addNewRuleBtn = document.getElementById('add-new-rule-btn');
             const cancelRuleBtn = document.getElementById('cancel-rule-edit-btn');
@@ -5802,7 +5796,6 @@
             
             deleteMultipleImportedContacts(selectedIndices);
         };
-
         const renderNumeriUtiliRubrica = () => {
             const isSupervisore = userProfile?.tipoUtente === 'supervisore';
             const descriptionText = isSupervisore 
@@ -6275,7 +6268,6 @@
     // La funzione ora si limita a controllare se il ruolo dell'utente è in questa lista.
     return creatorRoles.includes(userType);
 };
-
         const showPollVoters = async (pollId) => {
             try {
                 const pollDoc = await getDoc(doc(db, "polls", pollId));
@@ -7270,7 +7262,6 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                 });
             }
         };
-
         const voteOnPoll = async (pollId, optionIndex) => {
             try {
                 const settingsRef = doc(db, "settings", "pollCreationAuthorization");
@@ -7545,6 +7536,9 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                 res.prefixes.forEach(folderRef => {
                     const managementActions = canManage ? `
                         <div class="list-item-action flex gap-2">
+                            <button onclick="event.stopPropagation(); handleRenameFolder('${folderRef.fullPath}')" class="btn-icon" title="Rinomina Cartella" style="background:var(--accent-color); color:white;">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
                             <button onclick="event.stopPropagation(); handleDeleteItem('${folderRef.fullPath}', true)" class="btn-icon" title="Elimina Cartella" style="background:var(--danger); color:white;">
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                             </button>
@@ -7561,9 +7555,12 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
                 res.items.forEach(itemRef => {
                     if (itemRef.name === '.placeholder') return;
                     const managementActions = canManage ? `
-                        <div class="list-item-action">
+                        <div class="list-item-action flex gap-2">
+                            <button onclick="event.stopPropagation(); handleRenameFile('${itemRef.fullPath}', '${itemRef.name}')" class="btn-icon" title="Rinomina File" style="background:var(--accent-color); color:white;">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
                             <button onclick="event.stopPropagation(); handleDeleteItem('${itemRef.fullPath}', false)" class="btn-icon" title="Elimina File" style="background:var(--danger); color:white;">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v2h14V4z"/></svg>
                             </button>
                         </div>
                     ` : '';
@@ -7735,6 +7732,41 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
     }
 };
 
+        const handleRenameFile = async (fullPath, oldFileName) => {
+            const newFileName = prompt("Inserisci il nuovo nome per il file:", oldFileName);
+
+            if (!newFileName || newFileName.trim() === '' || newFileName.includes('/')) {
+                alert("Nome non valido.");
+                return;
+            }
+            if (newFileName === oldFileName) return;
+
+            const parentPath = fullPath.substring(0, fullPath.lastIndexOf(oldFileName));
+            const newPath = parentPath + newFileName.trim();
+
+            showModal('Ridenominazione in corso...', '<p>Questa operazione potrebbe richiedere alcuni istanti. Non chiudere la pagina.</p>');
+
+            try {
+                // Download the old file
+                const oldFileRef = ref(storage, fullPath);
+                const blob = await getBlob(oldFileRef);
+                
+                // Upload with new name
+                const newFileRef = ref(storage, newPath);
+                await uploadBytes(newFileRef, blob);
+                
+                // Delete the old file
+                await deleteObject(oldFileRef);
+                
+                await logActivity("file_renamed", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { from: fullPath, to: newPath });
+                hideModal();
+                loadStorageItems(currentStoragePath);
+            } catch (error) {
+                console.error("Errore durante la ridenominazione del file:", error);
+                hideModal();
+                alert(`Errore: ${error.message}`);
+            }
+        };
         const handleCreateFolder = async () => {
             const folderName = prompt("Inserisci il nome della nuova cartella:");
             if (!folderName || folderName.trim() === '') return;
@@ -7918,6 +7950,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         window.openUploadModal = openUploadModal;
         window.selectUploadPath = selectUploadPath;
         window.handleRenameFolder = handleRenameFolder;
+        window.handleRenameFile = handleRenameFile;
         window.loadItemsForCleanup = loadItemsForCleanup;
         window.toggleAllForCleanup = toggleAllForCleanup;
         window.handleCleanupSelectionChange = handleCleanupSelectionChange;
