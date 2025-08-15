@@ -143,12 +143,12 @@
         }
 
         .custom-confirm-btn.confirm {
-            background: var(--danger);
+            background: var(--accent-color);
             color: white;
         }
 
         .custom-confirm-btn.confirm:hover {
-            background: #c0392b;
+            background: var(--accent-color-dark);
         }
 
         .custom-confirm-btn.confirm.primary {
@@ -3171,7 +3171,7 @@
                 polls: "sondaggi"
             }[type];
 
-            if (!(await customConfirm(`Sei sicuro di voler eliminare definitivamente ${idsToDelete.length} ${typeName}?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare definitivamente ${idsToDelete.length} ${typeName}?`, 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
 
@@ -5111,7 +5111,7 @@
         };
 
         const deletePartialCondo = async (id) => {
-            if (!(await customConfirm('Sei sicuro di voler eliminare questo gruppo? L\'azione è irreversibile.', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo gruppo? L\'azione è irreversibile.', 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
             try {
@@ -5238,7 +5238,7 @@
         };
 
         const deleteGroupRule = async (ruleId) => {
-            if (!(await customConfirm('Sei sicuro di voler eliminare questa regola?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa regola?', 'Conferma', 'Conferma', 'Annulla'))) return;
             try {
                 await deleteDoc(doc(db, 'groupRules', ruleId));
                 await logActivity("group_rule_deleted", currentUser.uid, `${userProfile.nome} ${userProfile.cognome}`, { ruleId: ruleId });
@@ -5345,7 +5345,7 @@
                 return;
             }
             
-            if (!(await customConfirm('Sei sicuro di voler eliminare questo numero?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo numero?', 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
             try {
@@ -5414,7 +5414,7 @@
                 return;
             }
 
-            if (!(await customConfirm(`Sei sicuro di voler eliminare ${ids.length} contatti?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare ${ids.length} contatti?`, 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
 
@@ -5604,7 +5604,7 @@
                 return;
             }
 
-            if (!(await customConfirm('Sei sicuro di voler eliminare questo contatto importato?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo contatto importato?', 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
 
@@ -5638,7 +5638,7 @@
                 return;
             }
 
-            if (!(await customConfirm(`Sei sicuro di voler eliminare ${indices.length} contatti importati?`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare ${ids.length} contatti importati?`, 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
 
@@ -5712,7 +5712,7 @@
                 alert('Non hai i permessi per eliminare questa voce.');
                 return;
             }
-            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga dagli orari?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga dagli orari?', 'Conferma', 'Conferma', 'Annulla'))) return;
 
             try {
                 const qSchedule = query(collection(db, "importedCustodeSchedule"), orderBy("uploadedAt", "desc"), limit(1));
@@ -5761,7 +5761,7 @@
         };
 
         const deleteImportedAdminEntry = async (index) => {
-            if (userProfile?.tipoUtente !== 'supervisore' || !(await customConfirm('Sei sicuro di voler eliminare questa voce?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
+            if (userProfile?.tipoUtente !== 'supervisore' || !(await customConfirm('Sei sicuro di voler eliminare questa voce?', 'Conferma', 'Conferma', 'Annulla'))) return;
             try {
                 const q = query(collection(db, "importedAdminData"), orderBy("uploadedAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
@@ -6141,7 +6141,7 @@
                 alert('Non hai i permessi per eliminare orari.');
                 return;
             }
-            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga di orario?', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
+            if (!(await customConfirm('Sei sicuro di voler eliminare questa riga di orario?', 'Conferma', 'Conferma', 'Annulla'))) return;
 
             try {
                 const docRef = doc(db, "importedCustodeSchedule", docId);
@@ -6816,7 +6816,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         };
 
         const deleteUser = async (userId, userName) => {
-            if (!(await customConfirm(`Sei sicuro di voler eliminare l'utente ${userName}? L'utente verrà rimosso dal sistema e non potrà più accedere. L'azione è irreversibile.`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm(`Sei sicuro di voler eliminare l'utente ${userName}? L'utente verrà rimosso dal sistema e non potrà più accedere. L'azione è irreversibile.`, 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
             try {
@@ -7777,7 +7777,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
 
         const handleDeleteItem = async (fullPath, isFolder) => {
             const itemType = isFolder ? "cartella" : "file";
-            if (!(await customConfirm(`Sei sicuro di voler eliminare questo ${itemType}? L'azione è irreversibile.`, 'Conferma Eliminazione', 'Elimina', 'Annulla'))) return;
+            if (!(await customConfirm(`Sei sicuro di voler eliminare questo ${itemType}? L'azione è irreversibile.`, 'Conferma', 'Conferma', 'Annulla'))) return;
 
             if (isFolder) {
                 // La cancellazione di cartelle non vuote non è supportata direttamente dal client SDK.
@@ -7930,7 +7930,7 @@ if (userRole === 'adm' || userRole === 'amministratore' || userRole === 'supervi
         window.handleBulkDelete = handleBulkDelete;
 
         const deletePoll = async (pollId) => {
-            if (!(await customConfirm('Sei sicuro di voler eliminare questo sondaggio? L\'azione è irreversibile.', 'Conferma Eliminazione', 'Elimina', 'Annulla'))) {
+            if (!(await customConfirm('Sei sicuro di voler eliminare questo sondaggio? L\'azione è irreversibile.', 'Conferma', 'Conferma', 'Annulla'))) {
                 return;
             }
             try {
