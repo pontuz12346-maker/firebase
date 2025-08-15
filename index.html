@@ -3175,12 +3175,6 @@
                 return;
             }
 
-            const confirmationText = prompt(`Questa azione è irreversibile. Per confermare, digita "ELIMINA" nel campo sottostante.`);
-            if (confirmationText !== 'ELIMINA') {
-                alert("Operazione annullata. La parola di conferma non è corretta.");
-                return;
-            }
-
             const deleteBtn = document.getElementById('cleanup-delete-btn');
             deleteBtn.disabled = true;
             deleteBtn.textContent = 'Eliminazione in corso...';
